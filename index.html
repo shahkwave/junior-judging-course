@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Junior Ring Judge's Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* Direction: a judge's book. Ring-mat green structure, armband numerals, AKC placement ribbon colors as the progress language. One-column, phone first. */
+:root{
+  --bg:#EDF1EC; --surface:#FFFFFF; --ink:#17231D; --muted:#566860; --line:#D0DAD2;
+  --mat:#1F5A43; --mat-soft:#DDEBE2; --accent:#C23566; --accent-ink:#FFFFFF;
+  --good:#1D7A4B; --good-bg:#E1F2E8; --bad:#B03C2C; --bad-bg:#F8E5E1;
+  --band-bg:#FFFFFF; --band-ink:#111111;
+  --r1:#E0709A; --r2:#7B4B2A; --r3:#8CC77A; --r4:#9AA3A0;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1612; --surface:#16221C; --ink:#E7EFE9; --muted:#9BAEA4; --line:#2A3B31;
+    --mat:#3C9672; --mat-soft:#1D3128; --accent:#E5628F; --accent-ink:#1A0A11;
+    --good:#58C48C; --good-bg:#17301F; --bad:#F08A78; --bad-bg:#3A1D18;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1612; --surface:#16221C; --ink:#E7EFE9; --muted:#9BAEA4; --line:#2A3B31;
+  --mat:#3C9672; --mat-soft:#1D3128; --accent:#E5628F; --accent-ink:#1A0A11;
+  --good:#58C48C; --good-bg:#17301F; --bad:#F08A78; --bad-bg:#3A1D18;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:.005em}
+p{margin:0 0 .85em}
+ul,ol{margin:0 0 .9em;padding-left:1.2em}
+li{margin-bottom:.35em}
+button{font:inherit;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* top bar */
+.top{background:var(--mat);color:#fff;position:sticky;top:0;z-index:5}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:10px;padding-bottom:10px}
+.brand{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;background:none;border:0;color:#fff;cursor:pointer;padding:6px 0;text-align:left}
+.nav{display:flex;gap:4px;overflow-x:auto}
+.nav button{background:transparent;border:0;color:#fff;opacity:.82;font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.nav button[aria-current="page"]{opacity:1;background:rgba(255,255,255,.18)}
+.nav button:hover{opacity:1}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top :focus-visible{outline-color:#fff}
+
+main{padding:22px 0 80px}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(44px,12vw,72px);font-weight:800;text-transform:uppercase;margin:6px 0 12px}
+.hero p{color:var(--muted);max-width:52ch}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 0 4px;font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:.03em}
+.stats span b{font-weight:800;color:var(--mat)}
+
+/* ring card */
+.ringcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:18px 0 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ringcard .meter{flex:1 1 180px}
+.meter .lab{display:flex;justify-content:space-between;font-family:var(--display);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:15px;color:var(--muted)}
+.bar{height:10px;background:var(--mat-soft);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--mat);border-radius:6px;transition:width .4s}
+.ribbons{display:flex;gap:6px;align-items:flex-end}
+
+/* module list */
+.mods{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.mod{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;text-align:left;cursor:pointer}
+.mod:hover{border-color:var(--mat)}
+.band{flex:0 0 auto;min-width:54px;height:54px;display:grid;place-items:center;background:var(--band-bg);color:var(--band-ink);border:3px solid #111;border-radius:6px;font-family:var(--display);font-weight:800;font-size:34px;line-height:1;padding:0 6px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.mod h3{font-size:24px}
+.mod .sub{font-size:15px;color:var(--muted);line-height:1.35;margin-top:2px}
+.mod .meta{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-family:var(--display);font-weight:600;font-size:15px;color:var(--muted);letter-spacing:.03em;text-align:right;min-width:62px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:22px 0 0}
+.tool{background:var(--mat);color:#fff;border:0;border-radius:12px;padding:14px 16px;text-align:left;cursor:pointer}
+.tool h3{font-size:26px;text-transform:uppercase;letter-spacing:.02em}
+.tool p{margin:4px 0 0;font-size:15px;opacity:.9;line-height:1.35}
+.tool.alt{background:var(--surface);color:var(--ink);border:2px solid var(--mat)}
+h2.sec{font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin:26px 0 10px}
+
+/* lesson */
+.crumb{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.crumb .band{min-width:46px;height:46px;font-size:28px}
+.crumb h2{font-size:30px}
+.link{background:none;border:0;color:var(--mat);font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:6px 0}
+.dots{display:flex;gap:6px;margin:6px 0 14px}
+.dots i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.dots i.on{background:var(--mat)}
+.dots i.cur{background:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px}
+.card h3{font-size:32px;margin-bottom:10px}
+.card .body{font-size:18px}
+.card b{font-weight:600}
+.callout{background:var(--mat-soft);border-left:5px solid var(--mat);border-radius:6px;padding:10px 14px;margin:12px 0}
+.row{display:flex;gap:10px;justify-content:space-between;margin-top:16px;flex-wrap:wrap}
+.btn{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--mat);background:transparent;color:var(--mat);border-radius:8px;padding:10px 18px;cursor:pointer;min-height:46px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.mat{background:var(--mat);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:hover:not(:disabled){filter:brightness(1.07)}
+
+/* weights widget */
+.wbars{display:grid;gap:8px;margin:6px 0 12px}
+.wb{display:grid;grid-template-columns:1fr;gap:4px;background:none;border:0;text-align:left;cursor:pointer;padding:4px 0}
+.wb .nm{font-size:16px;line-height:1.2;display:flex;justify-content:space-between;gap:8px}
+.wb .nm b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1}
+.wb .tr{height:22px;background:var(--mat-soft);border-radius:4px;overflow:hidden}
+.wb .tr i{display:block;height:100%;border-radius:4px}
+.wb[aria-pressed="true"] .nm{color:var(--accent)}
+.t-drive i{background:var(--mat)} .t-reward i{background:#6C9B85} .t-gate i{background:#9AA3A0}
+.wdesc{min-height:3.4em;font-size:16px;color:var(--muted);margin:0 0 6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.03em;margin:4px 0 8px}
+.legend s{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;text-decoration:none}
+
+/* drill + details + table */
+.drill .q{font-family:var(--display);font-size:24px;font-weight:700;margin:12px 0 8px}
+.choices{display:grid;gap:8px}
+.opt{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;text-align:left;font-size:17px;line-height:1.4;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--mat)}
+.opt[disabled]{cursor:default}
+.opt.sel{border-color:var(--mat);background:var(--mat-soft)}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt .k{font-family:var(--display);font-weight:800;margin-right:8px}
+.why{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:17px}
+.why.ok{background:var(--good-bg);border-left:5px solid var(--good)}
+.why.no{background:var(--bad-bg);border-left:5px solid var(--bad)}
+.why .v{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:2px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:0}
+details>summary{cursor:pointer;padding:12px 14px;font-family:var(--display);font-weight:700;font-size:21px;line-height:1.15;list-style:none;display:flex;gap:10px;justify-content:space-between;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"+";font-size:26px;color:var(--mat);line-height:1}
+details[open]>summary::after{content:"\2212"}
+details .in{padding:0 14px 8px;font-size:17px}
+.in h5{margin:8px 0 4px;font-family:var(--display);font-size:16px;letter-spacing:.1em;text-transform:uppercase}
+.in h5.l{color:var(--good)} .in h5.f{color:var(--bad)} .in h5.n{color:var(--muted)}
+.tw{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;min-width:520px}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:15px;color:var(--muted)}
+td:first-child{font-family:var(--display);font-weight:700;font-size:19px;white-space:nowrap}
+
+/* quiz */
+.qhead{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:16px;color:var(--muted);margin-bottom:6px}
+.qtext{font-size:21px;line-height:1.35;font-weight:600;margin:6px 0 14px}
+.result{text-align:center;padding:22px 16px}
+.result .pct{font-family:var(--display);font-weight:800;font-size:84px;line-height:1}
+.result .place{font-family:var(--display);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.05em;margin:6px 0}
+.miss{border-left:5px solid var(--bad);background:var(--surface);border-radius:8px;padding:10px 14px;margin:10px 0;font-size:16px}
+.miss b{display:block;font-weight:600}
+.ok-line{color:var(--good)}
+.breakdown{display:grid;gap:6px;margin:8px 0}
+.bd{display:grid;grid-template-columns:34px 1fr 52px;gap:10px;align-items:center;font-size:16px}
+.bd .band{min-width:34px;height:34px;font-size:22px;border-width:2px}
+
+/* flashcards */
+.fc{perspective:900px}
+.fcard{min-height:240px;display:grid;place-items:center;text-align:center;background:var(--surface);border:2px solid var(--mat);border-radius:14px;padding:22px;cursor:pointer;width:100%;position:relative}
+.fcard .tag{position:absolute;top:10px;left:14px;font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:var(--muted)}
+.fcard .txt{font-size:23px;line-height:1.35}
+.fcard.back{background:var(--mat);color:#fff}
+.fcard.back .tag{color:#d5e8dd}
+.fcard.front .txt{font-family:var(--display);font-size:32px;font-weight:700;line-height:1.1}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.pill{font-family:var(--display);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:16px;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;cursor:pointer}
+.pill[aria-pressed="true"]{border-color:var(--mat);background:var(--mat-soft)}
+.hint{font-size:15px;color:var(--muted);text-align:center;margin-top:8px}
+.scen-t{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:420px){body{font-size:17px}.mod{flex-wrap:wrap}.mod .meta{flex-direction:row;margin-left:68px;gap:10px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <button class="brand" data-go="home">Junior Ring Course</button>
+  <nav class="nav" aria-label="Course sections">
+    <button data-go="home" id="n-home">Course</button>
+    <button data-go="cards" id="n-cards">Cards</button>
+    <button data-go="scenarios" id="n-scenarios">Rings</button>
+    <button data-go="exam" id="n-exam">Exam</button>
+  </nav>
+</div></header>
+<main><div class="wrap" id="app"></div></main>
+<script>
+/* ---------- COURSE DATA (part 1: modules 1-5) ---------- */
+function Q(p, c, w, why){ return { p:p, c:c, w:w, why:why }; }
+
+const WEIGHTS = [
+  { n:"Correct & Breed-Specific Presentation", w:30, tier:"drive",  d:"Stack and movement set up correctly for the breed and this individual dog, with the dog treated as a partner." },
+  { n:"Highlight Virtues & Minimize Faults",   w:15, tier:"drive",  d:"Choosing angles, speed and positions that show strengths and hide weaknesses without altering the dog's natural stance or gait." },
+  { n:"Efficiency in Motion",                  w:15, tier:"drive",  d:"Smooth, purposeful handling: quick correct set-ups, clean transitions, tools managed without interruption." },
+  { n:"Ability to Follow Directions",          w:12, tier:"reward", d:"Accurate patterns, attentiveness, and reading implied or unspoken cues from the judge." },
+  { n:"Overall Handling Style",                w:12, tier:"reward", d:"Composure, professionalism, connection with the dog, tidy lead and tool management, clean age-appropriate attire." },
+  { n:"Safety",                                w:10, tier:"gate",   d:"Safe spacing, control, no scooping or shoving, proper bait use, dog kept on the mat." },
+  { n:"Sportsmanship",                         w:5,  tier:"gate",   d:"Kindness to the dog, courtesy to officials and competitors, grace in winning and losing." }
+];
+const TIERS = {
+  drive:  "Drives placement",
+  reward: "Rewards poise / breaks ties",
+  gate:   "Pass-fail modifier"
+};
+
+const CATS = [
+  { n:"Correct & Breed-Specific Presentation (30%)",
+    look:["Dog set up correctly for the breed: front feet under the shoulders, rear showing proper angulation, head, expression, topline and tail suited to the breed","Efficient, balanced stack (hand or free) without fussing","Smooth starts and stops in gait, natural head carriage, breed-appropriate speed","Correct exam surface, dog straight at the edge of the mat","Gentle touch and an engaged partnership"],
+    fault:["Posting, A-framing, gooseneck, broken topline, under-stacked or over-stretched","Repeated resets that the dog's movement didn't cause","Not noticing a foot that moved","Jerky or lunging starts and stops, dragging, the sling-shot turn","Wrong speed or gait (such as pacing) not recognized","Yanking, or using feet and knees on the dog (excessive force is grounds for dismissal)","Disconnected from the dog"],
+    neutral:["A difficult dog earns no automatic credit; skillful, patient problem-solving can","A push-button dog earns no automatic penalty, but a dog that self-corrects while the junior is unaware does","Breed difficulty is never a factor","Confidence never outweighs correctness","Unfamiliar presentation is not wrong if it is consistent and structurally correct"] },
+  { n:"Highlight Virtues & Minimize Faults (15%)",
+    look:["Showcase angles that favor strengths (profile if the head is weak, head-on if the rear is weak)","Speed that shows correct movement","Body position that draws the eye to the best features","A clean, unobstructed side view in a corner showcase"],
+    fault:["Handling that calls attention to a fault (stroking a weak topline)","Moving too fast or too slow","Erratic starts, stops, turns","Sitting by a weak rear instead of toward the front","A showcase at a poor angle, or one that blocks the judge's view"],
+    neutral:["A glaring fault the junior cannot hide is not penalized if the effort to minimize it is thoughtful","An outstanding dog is not a reward in itself"] },
+  { n:"Efficiency in Motion (15%)",
+    look:["Dog set quickly and correctly, neither rushed nor tentative","Exam set-up with no wasted motion; adjust only what needs adjusting","Swift transitions: exam to gait to stop","Lead tension released or lead moved out of view","Tools handled without hesitation"],
+    fault:["Excessive time or unnecessary resets","Fumbling lead or bait, dropped tools","Rough or jerky motions","Excessive courtesy turns","Abrupt stops, overshooting the mat, stopping too close to or far from the judge","Bait or body blocking the judge's view"],
+    neutral:["If the dog moves and the junior fixes it quickly, there is no penalty (dogs are not robots)","If the junior's own faulty set made the position unsustainable, a penalty can fit"] },
+  { n:"Ability to Follow Directions (12%)",
+    look:["Ready and attentive with the dog presented when the exam starts","Accurate pattern with smooth turns and proper speed","Tracks where the judge is standing","Reads implied cues (a head-on gesture, or continuing to show until the judge moves on)"],
+    fault:["Inattentive; judge has to signal twice","Wrong or incomplete pattern","Starting before instructions finish","Missing showcase points or angles","Ignoring implied direction","Continuing to showboat against an instruction"],
+    neutral:["Asking for clarification is fine unless the junior simply wasn't listening","Keeping the dog engaged during a 'relax on the line' is fine; showboating is not"] },
+  { n:"Overall Handling Style (12%)",
+    look:["Composure and relaxed confidence","Natural movement that doesn't distract","Clear cues; the dog responds willingly","Bait used with purpose and actually given as a reward","Lead neatly wound and held in the hand","Clean, professional, age-appropriate clothing"],
+    fault:["Extra moves for their own sake, such as waving bait that cannot motivate the dog","Poor posture, bounce, heavy feet","Forced eye contact with the judge","Checked out or disconnected from the dog","Dropped bait, bait on the table, constant feeding right before the bite exam, misused squeaky toy","Dangling or finger-wrapped lead","Sloppy or inappropriate attire","Reaching into undergarments for bait is discouraged"],
+    neutral:["Movement style may be sharp or fluid if it is clear and consistent","Expensive attire gets no extra credit","Smiling, talking, energy: a handling contest, not a relationship contest","True play is shared and lifts the dog; ambush 'play' is imposed and diminishes it"] },
+  { n:"Safety (10%)",
+    look:["Safe spacing on entry, in class and on exit","Adjusting when re-ordered","Control at all times","Bait, toys and play used respectfully","Dog stays on the mat","Safe footwear and clothing"],
+    fault:["Scooping or plopping a small dog into place","Shoving or body-blocking a large dog","Crowding or cutting off others","Distracting other teams (squeaky toys, thrown or dropped food)","Loose collar, wrong placement, stringing up the dog","Unaware of the effect on others","Cutting corners or leaving the mat"],
+    neutral:["Table-checking is encouraged, but omitting it isn't automatically penalized and a performative check isn't rewarded","Lead-off exams are acceptable for skilled teams, but any loss of control weighs more heavily"] },
+  { n:"Sportsmanship (5%)",
+    look:["Calm kindness toward the dog","Courtesy to judge, steward and competitors","Polite acknowledgment of instructions","Congratulating others or offering help"],
+    fault:["Harsh correction or scolding, especially if the dog turns shy","Rude behavior or language","Casual acknowledgments such as 'yep' or 'uh-huh'","Visibly upset when passed over","Self-centered behavior (cutting in line, arguing for position)","Intentional interference (heavy penalty, even excusal)","Arguing with officials"],
+    neutral:["Not congratulating winners isn't a fault in itself, but eye-rolling, muttering or throwing ribbons is","Smiling and eye contact are not required; the junior just shouldn't look angry, confused or bored"] }
+];
+
+const MODS = [
+
+/* ===================== 1 ===================== */
+{ id:1, title:"Purpose of the Ring", sub:"What Junior Showmanship measures, and who the judge is meant to be",
+  lessons:[
+   { title:"What you are really judging", html:`
+     <p>The AKC Junior Showmanship program serves youth <b>ages 9 through 18</b>. It exists to build knowledgeable, skilled, sportsmanlike dog people, so the focus is the <b>handler's presentation skill</b>, not the dog's quality.</p>
+     <div class="callout"><b>Purpose in one line.</b> Evaluate the handler's skill in presenting a DOG to its best advantage, with technical ability and a positive, respectful attitude toward the dog and other participants.</div>
+     <p>A junior's overall performance includes:</p>
+     <ul><li>Correct, breed-appropriate presentation</li><li>Highlighting virtues and minimizing faults</li><li>Following the judge's guidance and ring procedure</li><li>A trusting partnership with the dog</li><li>Sportsmanship, in the ring and outside it</li></ul>` },
+   { title:"The judge as mentor", html:`
+     <p>Junior judging carries an <b>educational responsibility</b>. You pick the most skilled handlers, and you also model what good handling and good sportsmanship look like.</p>
+     <ul><li>Placements tell juniors, parents and coaches what wins. Reward the wrong thing and everyone watching learns it.</li><li>Corrections are made quietly and respectfully (covered in Module 8).</li><li>Feedback is specific and usable (covered in Module 10).</li></ul>
+     <div class="callout">Keep this phrase in mind through the whole course: <b>“The standard you tolerate is the standard juniors will learn to meet.”</b></div>` },
+   { title:"Partner, not prop", html:`
+     <p>Every category in the standard comes back to the relationship between junior and dog. The dog is a <b>valued partner</b> whose needs are understood and honored, never a prop used to get a result.</p>
+     <p>But skill and relationship have to appear together:</p>
+     <ul><li>A flawless technical run with no direction, praise or reinforcement, even when the dog is seeking guidance, is <b>disconnected</b>.</li><li>A warm bond with no technical skill is <b>no more desirable</b> than technique with no connection.</li><li>It is a <b>handling contest, not a relationship contest</b>. A quiet, introverted junior with better presentation should not lose to one who simply looks like they are having more fun.</li></ul>` },
+   { title:"Find correctness first, then sort", html:`
+     <p>In the breed ring you find the dogs of correct type, then sort by other attributes. In Juniors, find the <b>team with the correct presentation</b>, then sort on everything else.</p>
+     <p>The guide's stacking example: two juniors stop, set up and present with the same speed, efficiency and confidence. One shows a slightly posted front, a poor head position, and a tail presentation that reveals a low tail set. The other fixes all three. The motions look similar, but the quality of execution is different.</p>
+     <div class="callout"><b>Confidence is not a substitute for correctness.</b> A confident handler presenting incorrectly is still incorrect.</div>
+     <p>By the Open level, most juniors have the basics, so placements hinge on subtleties. Train your eye to see them.</p>` }
+  ],
+  quiz:[
+   Q("What is the main thing a Junior Showmanship judge evaluates?","The handler's skill in presenting the dog to its best advantage",["Which dog is closest to its breed standard","The junior's enthusiasm and personal charisma","How many wins the dog already has"],"The stated purpose is the handler's skill in presenting a dog to its best advantage, with a positive and respectful attitude."),
+   Q("Two juniors move into position equally fast and confidently. One stacks with a posted front and a visible low tail set; the other has corrected both. Who is stronger on this element?","The one who corrected the faults",["The one who got set up first","The one who made stronger eye contact with you","Neither, since speed and confidence were equal"],"Execution quality is the difference. Confidence is not a substitute for correctness."),
+   Q("A quiet junior with a more correct presentation is in your class with a bubbly junior who is smiling and talking to the dog constantly but handles less accurately. Which approach fits the guide?","Reward the more correct handling, as long as the quiet junior still shows a positive partnership",["Reward the bubbly junior, because enjoyment shows partnership","Tie them, since personalities differ","Penalize the quiet junior for lack of expression"],"The guide calls this a 'handling contest, not a relationship contest.' Smiling and chatter are individual traits, and excess talking can even signal nerves."),
+   Q("Which performance best matches the guide's idea of a 'disconnected' junior?","A technically sound run with no direction or praise, even though the dog keeps seeking attention",["A junior who is quiet but cues the dog clearly","A junior working a young, green dog who needs frequent resets","A junior using a loose lead on a breed shown that way"],"Technically sound handling with no relationship, no direction, praise or reinforcement is the disconnected picture."),
+   Q("Beyond selecting winners, what extra responsibility does the guide place on a Junior Showmanship judge?","Acting as a mentor and role model",["Acting as the junior's coach during the class","Enforcing the breed standard for each dog","Ranking juniors by potential for future success"],"Judges 'serve as mentors and role models,' fostering confidence, learning and a positive competitive environment."),
+   Q("How does the guide describe the basic sorting strategy for a close class?","Find the team with the correct presentation first, then sort by the other elements",["Sort by the junior's age and class first","Start with sportsmanship, then break ties on presentation","Rank the most animated team first"],"It parallels the breed ring: correct type first, then other attributes.")
+  ]
+},
+
+/* ===================== 2 ===================== */
+{ id:2, title:"The Seven Categories", sub:"The weights, how they work together, and what each rewards and faults",
+  lessons:[
+   { title:"The weights", type:"weights", html:`
+     <p>Tap a bar to see what it covers. The seven categories sum to <b>99%</b>; the guide rounded them for simplicity. If you want the missing 1%, <b>relationship and partnership with the dog</b>, which appears in almost every category, is the element to give it to.</p>` },
+   { title:"How the weights work together", html:`
+     <p>The percentages are not just arithmetic. The guide describes three jobs:</p>
+     <ul>
+      <li><b>Placement drivers:</b> Correct &amp; Breed-Specific Presentation, Highlighting Virtues/Minimizing Faults, and Efficiency in Motion. These define true skill and knowledge and should drive your placements.</li>
+      <li><b>Poise and tie-breakers:</b> Following Directions and Overall Handling Style reward exceptional poise and professionalism. They can decide how placements are distributed, or break ties between equally skilled handlers.</li>
+      <li><b>Pass/fail modifiers:</b> Safety and Sportsmanship. Exceptional, egregious or repeated behavior can take an otherwise talented handler out of the running.</li>
+     </ul>
+     <div class="callout">The top three categories total 60%, but their real power is bigger than the number: they decide who is skilled. Safety and Sportsmanship total only 15%, but serious problems can knock out a polished handler.</div>` },
+   { title:"Practice: sort the categories", type:"tierdrill", html:`
+     <p>Assign each category to the job it does in your decision-making.</p>` },
+   { title:"Look-fors, faults and neutral points", type:"cats", html:`
+     <p>Open each category for a compact view of what the guide rewards, faults, and says <b>not</b> to penalize or credit automatically. The neutral points matter as much as the faults; many exam questions turn on them.</p>` }
+  ],
+  quiz:[
+   Q("What is the weight of Correct & Breed-Specific Presentation?","30%",["15%","12%","25%"],"It is the heaviest category at 30%."),
+   Q("Which two categories are each weighted 12%?","Ability to Follow Directions and Overall Handling Style",["Safety and Sportsmanship","Efficiency in Motion and Highlighting Virtues","Following Directions and Safety"],"Following Directions and Overall Handling Style are both 12%."),
+   Q("The weights add up to 99%. If you want to account for the missing 1%, what does the guide suggest?","Relationship and partnership with the dog",["Attire and personal appearance","The quality of the dog","The junior's age"],"Relationship/partnership is mentioned in nearly every category and is the suggested element."),
+   Q("Which three categories should drive your placements?","Correct Presentation, Highlighting Virtues/Minimizing Faults, Efficiency in Motion",["Following Directions, Handling Style, Safety","Safety, Sportsmanship, Handling Style","Correct Presentation, Handling Style, Sportsmanship"],"The first three define true skill and knowledge."),
+   Q("How should Safety and Sportsmanship function in your thinking?","More like pass/fail modifiers: egregious, repeated or exceptional behavior can take a skilled handler out of the running",["Equal partners with Correct Presentation","Pure tie-breakers used only when everything else is equal","They only matter for the Best Junior decision"],"They act as modifiers rather than as heavy scoring categories."),
+   Q("A junior keeps stroking a dog's weak topline throughout the class. Which category is this mainly a fault under?","Highlight Virtues & Minimize Faults",["Safety","Ability to Follow Directions","Sportsmanship"],"Handling that calls attention to a fault is listed as a fault under Highlight Virtues & Minimize Faults."),
+   Q("A junior has a dog with a glaring structural fault they cannot hide, but handles thoughtfully to minimize it. What is the right approach?","Do not necessarily penalize; credit the thoughtful effort to minimize the fault",["Penalize heavily, since the fault is visible","Ignore handling and place by dog quality","Reward the junior extra for the challenge automatically"],"Not every junior has a top-quality dog. The guide says not to penalize if the junior makes every effort to minimize the fault. Likewise, an outstanding dog is not itself a reward."),
+   Q("A well-set dog moves a foot because a loud noise startles it, and the junior corrects it quickly. What does the guide say about penalties?","No penalty, since dogs are not robots, unless the junior fails to correct it",["Penalize for wasted motion","Penalize in Safety","Penalize only if it happens twice"],"Under Efficiency in Motion, a quick, effective correction of a dog's reaction is neutral. Failure to correct, or an incorrect original set, may be penalized.")
+  ]
+},
+
+/* ===================== 3 ===================== */
+{ id:3, title:"Correctness Before Preference", sub:"Technical execution first; breed-specific style is a secondary layer",
+  lessons:[
+   { title:"The core principle", html:`
+     <p><b>Technical correctness must come before stylistic or other choices.</b> A junior should never be penalized or rewarded for style alone when the technical execution doesn't support it.</p>
+     <p>Technical correctness includes:</p>
+     <ul><li>A dog consistently presented in a balanced, controlled, correct profile</li><li>Ring awareness, timing and control</li><li>Informed decisions that result in the best presentation of <i>this</i> dog</li><li>Clean transitions and the ability to recover when something goes wrong</li><li>A supportive partnership that helps the dog succeed</li></ul>
+     <p>Breed-specific presentation is a <b>secondary layer</b>, evaluated only after technical competence has been established.</p>` },
+   { title:"Free stack vs hand stack; loose vs firm lead", html:`
+     <p>When more than one method is acceptable for a breed, judge the <b>quality of the execution, not the method</b>.</p>
+     <ul>
+      <li>A free stack that produces a correct, stable outline beats a hand stack that never quite settles.</li>
+      <li>A clean, efficient, correct hand stack beats a free stack that is inconsistent, badly timed or badly angled.</li>
+      <li>Choosing a hand stack doesn't excuse repeated struggle; choosing a free stack doesn't excuse lost control or poor angle.</li>
+      <li>A loose lead is only optimal if it produces correct gaiting. A lead with light consistent contact beats a loose one that loses timing and connection.</li>
+      <li>A firm lead that restricts movement or nearly lifts the dog loses to firm-but-not-tight contact that guides the dog smoothly.</li>
+     </ul>
+     <div class="callout">Only when presentations are equally clean and technically correct may a judge consider breed-specific stylistic preference as a <b>secondary factor</b>.</div>` },
+   { title:"When the breed standard speaks", html:`
+     <p>Some standards define presentation; most presentation choices are only implied or shaped by tradition. If a standard clearly defines a method, you must account for it. The guide gives three examples:</p>
+     <ul>
+      <li><b>German Shepherd Dog:</b> the standard calls for the dog to be shown at a trot on a loose lead. A moderate pace on a visibly loose lead that gives smooth, rhythmic movement is more correct than a faster, flashier trot with lead tension.</li>
+      <li><b>Doberman Pinscher:</b> shown square, alert and balanced. Precision usually points toward hand-stacking, but the standard doesn't mandate one method and presentation can vary by dog.</li>
+      <li><b>Afghan Hound:</b> 'stands naturally.' Continual hand-stacking can interfere, but small, purposeful adjustments to a free stack should not be penalized.</li>
+     </ul>
+     <p><b>Bottom line:</b> when technical execution and breed-appropriate presentation conflict, technical correctness prevails.</p>` },
+   { title:"Unfamiliar does not mean wrong", html:`
+     <p>If a junior consistently presents something you don't recognize, and the result is structurally correct, <b>assume they are correct</b>.</p>
+     <div class="callout"><b>The Beagle ears example.</b> A judge from an erect-ear breed sees a Beagle junior dropping the dog's ears. The Beagle standard calls for a soft, pleading expression, which dropped, relaxed ears support. Unless you know for sure, treat it as neutral.</div>
+     <ul><li>A junior showing in a non-traditional way should ideally show a short piece of the traditional presentation first, then move to what flatters the dog.</li><li>Some juniors do a traditional stack in the individual exam and a more supported variation on the line, where other dogs are close and the stack must be held longer.</li><li>The beagle standard doesn't dictate one stack, and in the guide's lineup, a 'traditional' stack with an A-framed dog shouldn't be rewarded over correct non-traditional ones.</li></ul>` },
+   { title:"Difficult dogs, push-button dogs", html:`
+     <ul>
+      <li><b>Difficult dog:</b> no automatic extra credit. But a junior who stays calm, positive and keeps problem-solving may be showing tremendous skill, possibly more than a junior on a seasoned dog who adds nothing and uses no breed-specific technique.</li>
+      <li><b>Never</b> assume one breed is harder than another.</li>
+      <li><b>Push-button dog:</b> making it look easy is a desirable skill. Don't speculate about training. But if the dog self-corrects while the junior is unaware, or compensates for the junior's mistakes, judge the <b>junior's actual contribution</b>.</li>
+      <li>The dog standing or moving incorrectly isn't penalized by itself. Failing to recognize and correct it is. Frustration or impatience is a handler issue even when the dog is the one misbehaving.</li>
+      <li>Hand-stacking and free-stacking breeds require equal skill. Neither is harder.</li>
+     </ul>` }
+  ],
+  quiz:[
+   Q("What is the core principle of 'Correctness Before Preference'?","Technical correctness must come before stylistic or breed-tradition choices",["The most traditional presentation should always win","Confidence outranks technical correctness","Breed-specific style is judged first, then technique"],"Breed-specific style is a secondary layer evaluated after technical competence."),
+   Q("In a breed where hand-stacking is common, two juniors free-stack and achieve a correct, stable outline. A third hand-stacks the usual way but never settles the dog. Which is stronger on this element?","The two free-stackers, because execution matters more than method",["The hand-stacker, because it is the breed norm","All three are equal","The hand-stacker, because it is more difficult"],"Judges evaluate the quality of execution, not the method chosen."),
+   Q("Junior A uses light but consistent lead contact and produces smooth movement. Junior B tries a looser lead typical of the breed but loses timing and connection. Who is stronger on this element?","Junior A",["Junior B, because a loose lead is traditional","Neither, since both are valid choices","Junior B, because it is harder to do well"],"A loose lead is only optimal if it can produce the correct gaiting presentation."),
+   Q("The German Shepherd Dog standard calls for movement at a trot on a loose lead. Junior X moves faster with lead tension and looks flashy; Junior Y moves at a moderate pace on a visibly loose lead with smooth rhythm. Who has the more correct presentation?","Junior Y",["Junior X, because flashier movement shows more skill","Neither; speed and lead tension are only style","Junior X, because speed demonstrates control"],"When the standard defines the method, judges prioritize standard-defined presentation over exaggerated motion."),
+   Q("The Afghan Hound standard says the dog 'stands naturally.' How does that shape your evaluation?","Excessive continual hand-stacking may interfere, but small purposeful adjustments aren't penalized",["Any touching of the dog is a fault","Hand-stacking should be rewarded for precision","Free-stacking is mandatory"],"The key phrase is 'stands naturally.' A junior who resists overhandling may be more correct, while thoughtful minor corrections are fine."),
+   Q("A Beagle junior consistently presents with the dog's ears dropped, and you come from an erect-ear breed. What should you do?","Treat it as neutral unless you know for sure, because the Beagle standard calls for a soft, pleading expression",["Penalize it as incorrect expression","Ask the junior to change it","Reward it, since it's unusual"],"If you aren't familiar with the breed's presentation, do not penalize what may be correct."),
+   Q("A junior is calmly and positively working a dog that clearly wants to leave the ring. The other junior is on a well-seasoned dog and adds minimal direction. What can you do?","You can reasonably place the first junior above, because they showed skill and problem-solving",["Place the seasoned-dog junior above because the result is closer to perfect","Place the dogs by difficulty alone","Ignore dog behavior entirely"],"The guide says the path to the result matters, and working a challenging dog skillfully is a skill."),
+   Q("A dog self-corrects its stack while the junior is unaware and not leading the correction. How should you evaluate it?","Judge the junior's actual contribution, which may be lacking",["Reward the junior, since the dog is correct","Ignore it as luck","Penalize the dog's training"],"A dog that self-corrects or compensates for incorrect handling may indicate a lack of effective handling."),
+   Q("A dog paces in the down and back. When is the junior NOT necessarily penalized?","When the pacing wasn't caused by the junior's entrance choice and they recognize it and restart correctly",["Never; pacing is always a handler fault","Only if the dog is a toy breed","Only if the junior is a Novice"],"Penalty applies if the junior caused it or fails to recognize and correct it.")
+  ]
+},
+
+/* ===================== 4 ===================== */
+{ id:4, title:"Technique Before Style: On the Move", sub:"Body position, lead hand, pace, distance and purpose",
+  lessons:[
+   { title:"The handler's body tells a story", html:`
+     <p>Breed-specific presentation doesn't end when the dog leaves the stack. A junior's body position, lead hand, pace, stride, distance and carriage form a picture during movement.</p>
+     <p>The guide's exercise: look at two juniors without their dogs. One has a low, steady lead hand and purposeful stride (you picture a Hound or Terrier). The other is more upright with a higher, softer hand (you picture a Toy breed). Put a Beagle on each, and the first picture fits the dog; the second looks delicate and disconnected.</p>
+     <div class="callout">Variation is not the same as <b>contradiction</b>. The junior's body should make sense with the dog. The handler's movement should tell the same story as the dog's.</div>` },
+   { title:"Five things to watch", html:`
+     <ul>
+      <li><b>Body position:</b> too far behind looks pulled; too far ahead drags or hurries the dog; crowding inward interferes with front movement; drifting away loses control and adds lateral pressure; leaning forward looks like running downhill.</li>
+      <li><b>Lead hand:</b> the hand must produce the correct result. It must not lift the dog, change head carriage, shorten the stride or pull in. Don't reward high or low hands just because tradition associates them with a group.</li>
+      <li><b>Pace and stride:</b> the right pace is natural and fluid, without rushing, lagging, pulling or restraining. Short choppy steps disrupt a ground-covering dog; a big running stride can overwhelm a small one. Quiet, light footfalls. If you hear the handler before you see the dog, it isn't ideal.</li>
+      <li><b>Distance from dog:</b> intentional. Too close crowds and hides movement; too far weakens control or adds lead tension.</li>
+      <li><b>Forward purpose:</b> confident and directional, not rushed, stomping or dragging, and not tentative either.</li>
+     </ul>` },
+   { title:"Beware caricature and choreography", html:`
+     <p>Don't reward a caricature of breed-specific handling, or of 'junior style':</p>
+     <ul>
+      <li>Leaning dramatically forward with a Hound, or floating with an unnecessarily high hand beside a zigzagging Toy, doesn't show more knowledge.</li>
+      <li>Exaggerated leaping or floating transitions (the 'junior gait') are not a natural gait.</li>
+      <li>Forced eye contact and rehearsed 'check-ins' at set points in a pattern are often taught without the junior knowing why.</li>
+     </ul>
+     <p>Checking in is fine when it confirms an instruction or tells the junior where you are, so they can showcase well. It earns nothing just for happening at a prescribed spot. If your eye goes to the handler before the dog, the dog is not being presented optimally.</p>` },
+   { title:"Familiar is not the same as effective", html:`
+     <p>Don't give automatic credit to a presentation just because it resembles what you see in the breed ring, and don't penalize an unfamiliar variation merely because it differs from your preference. But don't swing so far that you ignore body position, which affects balance, pace, lead tension, visibility, freedom of movement, control and team cohesion.</p>
+     <div class="callout"><b>The question to ask:</b> Does this junior's body position, lead management, pace and stride create an appropriate and technically effective presentation of <i>this</i> dog? Not: Does this junior move the dog the way I would?</div>
+     <p>In the guide's three-junior example, one handler out-moves her dog with downhill-skier lean and wide arms, causing the dog to gooseneck. Another is a bit ahead, seeming to pull the dog. A third matches the dog's stride but has a clawed lead hand. No single moment decides placement, but a moment may <b>eliminate</b> a candidate if everything else is equal.</p>` }
+  ],
+  quiz:[
+   Q("A junior with a beagle moves with a very light, high hand and delicate floating stride suitable for a toy dog. What is the concern?","The junior's body position is in contradiction with the dog, giving a less cohesive picture",["Any high hand is a fault","Toy-style movement is always acceptable on any breed","Nothing; body position is irrelevant to the evaluation"],"Variation is acceptable but contradiction isn't; the junior's movement should tell the same story as the dog's."),
+   Q("A junior runs too far ahead of the dog. What is the likely effect?","They may drag the dog forward or cause it to hurry",["The dog will appear more elegant","It improves reach and drive","It has no effect on movement"],"Too far ahead pulls the dog; too far behind looks pulled by the dog."),
+   Q("How should a judge treat lead hand height?","Judge by the result; neither a high nor a low hand earns credit just because tradition links it to a breed group",["High hands are for Toys and should be rewarded there","Low hands always show better control","Lead hand height is never relevant"],"The hand position must produce the correct result without lifting, shortening stride or creating tension."),
+   Q("Which is a sign that a junior's movement may be too much?","You notice the junior more than the dog, or hear them coming",["The junior moves quietly with light footfalls","The pace matches the dog's natural rhythm","The junior's off hand rests naturally"],"If you notice the handler's movement more than the dog's, it may not be the ideal picture."),
+   Q("When is a junior's 'check-in' with the judge acceptable?","When it serves a purpose, such as confirming an instruction or learning where you are standing",["When performed at each corner no matter what","When done with prolonged eye contact","Whenever it looks polished"],"It earns nothing just for occurring at a prescribed point and shouldn't be dramatic or forced."),
+   Q("In the guide's example of the junior with downhill-skier lean and wide arms, what problem appears in the dog?","Excessive speed causing the dog to gooseneck",["The dog paces","The dog sits repeatedly","The dog leaves the mat"],"The exaggerated forward motion leads to excess speed, causing the dog to slightly gooseneck."),
+   Q("What question should the judge ask about body position and lead management?","Does it create an appropriate and technically effective presentation of this dog?",["Does it match how I handle this breed?","Does it resemble what the top breed-ring handlers do?","Does it look dramatic from ringside?"],"That is the guide's 'better question.'"),
+   Q("Why might one poor moment matter even though no single moment decides placement?","It can eliminate someone from your candidates when everything else is equal",["It always drops a junior to last","It should never matter at all","It only matters in the Best Junior class"],"The guide notes that a moment may eliminate someone if everything else is equal up to movement.")
+  ]
+},
+
+/* ===================== 5 ===================== */
+{ id:5, title:"Placements & Fairness", sub:"From evaluation to ribbons, and the Best Junior procedure",
+  lessons:[
+   { title:"Who deserves Best Junior", html:`
+     <p>Choose the <b>most skilled and complete handler</b>, not the most enthusiastic, charismatic or 'promising' one. A positive attitude and good sportsmanship should be expected. They shouldn't outweigh handling merit, and winners should have both.</p>
+     <p>None of these should influence placements:</p>
+     <ul><li>Age or size of the junior</li><li>Experience level or class</li><li>Personality</li><li>The breed presented</li><li>Perceived potential</li><li>How often they show, who handles for them, or how familiar their face or dog is</li></ul>
+     <p>The guide's example: a 9-year-old Novice who has shown since age 3 and a 17-year-old Open Senior who started recently. Placing the younger one ahead simply for being 'good for their age' is wrong. Placing them ahead for better skill is a valid award.</p>` },
+   { title:"Consistency across classes", html:`
+     <ul>
+      <li>If two Master Juniors are the best handlers that day, they win. Don't 'spread the wealth'; year-end recognition and scholarships rest on accumulated points.</li>
+      <li>Don't default to Masters either; they may not be the best that day.</li>
+      <li>No sympathy placements for Open Seniors who might be in their last big show.</li>
+      <li>No rewarding Novices or Open Juniors for showing promise.</li>
+     </ul>
+     <div class="callout"><b>The heart-dog exercise.</b> Your own dog has just won the Group in Orlando and must go into Best in Show now; only your juniors are available. Who would you hand the lead to? Not the cheerful but less skilled; not the confident one who never got the dog stacked quite right; not the technically correct one who is frustrated when the dog isn't perfect; not the one whose handling gets more urgent under pressure. You pick consistent confidence, solid technique, and a harmonious partnership that brings out the best in the dog.</div>
+     <p>Encourage potential <b>after</b> judging, by inviting the junior to talk with you, not through placements.</p>` },
+   { title:"Order of awards", html:`
+     <p>Best Junior and Reserve Best Junior follow a process like Winners and Reserve Winners in the breed ring.</p>
+     <ol>
+      <li><b>Select Best Junior Handler</b> from the class winners who returned. Use whatever individual or group exercises you consider fair.</li>
+      <li><b>Invite the eligible reserve competitor:</b> the second-place junior from the <i>same class</i> as the newly named Best Junior joins the remaining class winners.</li>
+      <li><b>Evaluate for Reserve:</b> run the <i>same exercises</i> and the same criteria, then pick the one who most closely approaches the skill and presentation of your Best Junior.</li>
+     </ol>` },
+   { title:"Know your priorities", html:`
+     <p>Juniors value consistency. If you are clear about what you reward and then reward it every time, juniors know what to showcase in your ring.</p>
+     <p>The guide's sample statement of priorities (a section the author notes is still being finalized, pending permission to post such statements) includes:</p>
+     <ul><li><b>Present your dog, not yourself:</b> correct breed-specific presentation, highlighting strengths, smooth efficient handling, right speed and timing, quiet supportive handling.</li><li><b>Professionalism and ring awareness:</b> accurate response to directions, confident clear handling, respectful partnership, discreet bait use, correct tool use.</li><li><b>Safety:</b> spacing, bait never thrown or placed on the floor or table (and any dropped bait picked up immediately), safe table, ramp and floor exams, control and awareness of other teams.</li></ul>` }
+  ],
+  quiz:[
+   Q("Which of these may legitimately influence a Best Junior decision?","The junior's actual handling skill demonstrated in your ring that day",["The junior's age and 'good for their age' performance","The junior's frequent appearances at shows","The junior's perceived future potential"],"Judge only the skills presented in your ring on that day."),
+   Q("A 9-year-old Novice with six years of experience competes against a 17-year-old Open Senior who is newer to the ring. Which reasoning is acceptable?","Place whichever shows the better handling skills that day",["Place the younger ahead because they are 'good for their age'","Place the older ahead because they are in a higher class","Place both equally and flip a coin"],"Age or size has no bearing; skill does."),
+   Q("What is the first step in the Best Junior / Reserve Best Junior procedure?","Select Best Junior Handler from the class winners who returned",["Select Reserve Best Junior first","Invite the second-place junior from every class","Ask each class winner to pick a partner"],"Best Junior is chosen first, followed by the reserve process."),
+   Q("After Best Junior is named, who becomes eligible to compete for Reserve?","The second-place junior from the same class as Best Junior",["The class winner with the next-highest points","Any junior in the ring who wishes to enter","The class winner from the next-largest class"],"The second-place winner from the Best Junior's class returns to join the remaining class winners."),
+   Q("When evaluating for Reserve Best Junior, which exercises should you use?","The same exercises and movement pattern used for the Best Junior evaluation",["A more difficult pattern","Only a stacked comparison","A new set of exercises chosen at random"],"Consistent criteria ensure fairness and integrity."),
+   Q("Two Master Juniors are clearly your best handlers. What should you do?","Award them Best and Reserve; their prior accomplishments don't count against them",["Place a lower class winner to 'spread the wealth'","Move them down because they have enough wins","Ask them to compete again with a harder pattern"],"Year-end recognition depends on accumulated points; judges don't redistribute wins."),
+   Q("You notice an exceptionally promising young junior who still needs polish. How should you encourage them?","Invite them to speak with you afterward and offer a compliment or constructive guidance",["Place them higher as encouragement","Give them Best Junior to build confidence","Mention it to the class during judging"],"Encouragement belongs after judging, not through placements.")
+  ]
+}
+];
+/* ---------- COURSE DATA (part 2: modules 6-10) ---------- */
+MODS.push(
+
+/* ===================== 6 ===================== */
+{ id:6, title:"Running the Ring", sub:"Entry, organization, required elements, cuts and the cardinal rules",
+  lessons:[
+   { title:"Entry, late arrivals and early exits", html:`
+     <ul>
+      <li><b>Calling the class:</b> typically in catalog order, with time and space to enter safely. Do a <b>visual headcount</b> and verify armbands against the judge's book or steward's list.</li>
+      <li><b>Late arrivals:</b> juniors juggle multiple rings. Be flexible: you may allow entry <b>as long as cuts or placements have not begun</b>, especially if the junior communicated the conflict or is visibly at the gate. Late entry is not a fault. Give them every required element and the same evaluation.</li>
+      <li><b>Leaving the ring:</b> a junior may be excused on request, but must be told <b>they cannot re-enter the class</b>. Handle it calmly with no commentary. If it happens during another team's presentation, offer that team a re-do.</li>
+     </ul>
+     <p>Evaluation starts at the gate: polite to the steward when picking up the number, no cutting in line, calm dog on entry. A parent or mentor can help a younger junior pick up an armband.</p>` },
+   { title:"Organizing and sorting", html:`
+     <p>Your first job is deciding how to organize the class.</p>
+     <ul>
+      <li><b>Resort by size and gait speed</b> in most rings. Self-sorting suits small, experienced classes (Open, Masters). Direct the sort for large, mixed or Novice classes.</li>
+      <li>Resort when dog size or speed varies greatly, when ring congestion limits evaluation, or when the initial order prevents fair movement.</li>
+      <li>Resort promptly with clear instructions. Avoid repeated reshuffling.</li>
+      <li><b>Split</b> the class into smaller groups when entries are large or the ring is small. Consider dog size, gait speed and equipment needs (grouping table and ramp breeds reduces equipment movement).</li>
+     </ul>` },
+   { title:"Required elements and consistency", html:`
+     <p><b>Every class includes, at minimum:</b></p>
+     <ul><li>Group movement</li><li>Individual examination</li><li>Individual movement</li><li>Group presentation (stacked on the line)</li></ul>
+     <p><b>Optional:</b> an individual showcase presentation, and group comparative exercises (fronts, expression, rears).</p>
+     <p><b>Consistency:</b> if the show offers <i>levels</i> (Master, Open, Novice), every junior in a level gets the same pattern. If it offers <i>classes</i> (Novice Junior, Open Senior and so on), the pattern is consistent within each class. It may differ between levels or classes.</p>
+     <p>Discouraged for safety: walking behind juniors (especially between junior/dog and the ring gate), and placing hands on table or ramp breeds while the dog is on the floor.</p>` },
+   { title:"Cuts, instructions, equipment, awards", html:`
+     <ul>
+      <li><b>Cuts:</b> pull <b>at least four</b> from each group so a group with all your top placements isn't disadvantaged. Pulled juniors return together for final comparison. With huge entries you may cut from your cuts. Aim for a final group of <b>at least six</b>, so placements of 1st through 4th still leave non-placed juniors exiting with someone.</li>
+      <li><b>Instructions:</b> clear, concise, audible to all; check that juniors at the end of the line can hear. Don't give materially different instructions to individuals unless it's for safety. Pause to confirm understanding in Novice or younger classes.</li>
+      <li><b>Furniture:</b> avoid moving juniors past in-ring equipment, plan for table/ramp entry and removal, use discretion on ramp-optional breeds, and brief your steward in advance.</li>
+      <li><b>Making awards clear:</b> pull placed juniors to the center or a distinct side, and make your picks obvious by pointing, or naming breeds (“the Beagle is first”). Never gesture vaguely.</li>
+     </ul>` },
+   { title:"The cardinal rules", html:`
+     <p><b>You MUST:</b></p>
+     <ul><li>Move the class as a group (resort by speed/size so this is safe)</li><li>Examine and move every team individually, with the same pattern within the class</li><li>Be aware of timing</li><li>Make clear placements</li><li>Mark your book correctly</li></ul>
+     <p><b>You must NEVER:</b></p>
+     <ul><li>Run juniors past in-ring equipment</li><li>Move the class without resorting when needed</li><li>Walk on the off-side of the juniors (between them and the ring gate); stay to the center of the ring</li><li>Examine or touch table or ramp breeds on the ground (including line-up re-touches)</li><li>Ask for complex patterns in Best Junior. No triangles or L's; keep patterns appropriate to the lowest class, often Novice.</li></ul>
+     <p><b>BE CAUTIOUS about rewarding:</b> poor bait or tool management, harsh handling, interference or showboating. A polished performance should never outweigh unsafe handling, poor sportsmanship, or behavior that harms another team.</p>` },
+   { title:"Start to finish: every phase counts", type:"phases", html:`
+     <p>You are evaluating continuously, not just during the individual exam. Ring management moments are <b>evaluative, not neutral</b>. No single moment should outweigh consistent, accurate performance across the whole class.</p>` }
+  ],
+  quiz:[
+   Q("Which set lists the minimum required elements of every class?","Group movement, individual exam, individual movement, group presentation",["Individual exam, showcase, group comparative, awards","Group movement, triangle pattern, individual movement, showcase","Individual exam, individual movement, ribbons, group comparative"],"Showcase and comparative exercises are optional."),
+   Q("A show offers classes (Novice Junior, Novice Intermediate, Open Senior and so on). What does the guide require about patterns?","They must be consistent for every junior within a class, but may vary between classes",["Every class must use the same pattern","Each junior may choose their own pattern","Patterns may vary from junior to junior within a class"],"When offering classes, the pattern is consistent within each class."),
+   Q("When making cuts from multiple groups, how many juniors should you pull from each group at minimum?","At least four",["At least two","Exactly six","Only the class winner"],"Pulling at least four avoids disadvantaging exhibitors when top competitors are concentrated in one group."),
+   Q("Why does the guide recommend a final group of at least six?","So that 1st through 4th can be awarded and non-placed juniors don't exit alone",["Because the AKC requires six","To make sure each breed is represented","To shorten the time per junior"],"Non-ribboned juniors walk out with at least one other exhibitor."),
+   Q("A junior arrives at the gate late because of a conflict in another ring, and you have not yet made cuts. What may you do?","Allow the junior to enter and give them the same required elements",["Refuse entry because the class has started","Allow entry but skip the individual exam","Penalize them one placement"],"Judges may allow entry as long as cuts or placements have not begun."),
+   Q("A junior asks to leave the ring mid-class. What must you make clear?","Once excused, they may not re-enter the class",["They may re-enter at the end of the class","They will be penalized in the Best Junior class","They must ask the AKC representative first"],"This keeps ring integrity and fairness."),
+   Q("Which is a MUST NEVER?","Gait juniors past tables or ramps positioned in the ring",["Resort a class by dog size","Make cuts from each group","Use a steward to move equipment"],"Walk them past equipment or remove it before gaiting at speed."),
+   Q("Where should the judge stand while the class is moving or during exams and group evaluations?","In the center of the ring, never on the off-side between the juniors and the ring gate",["Behind the line of juniors","Between juniors and the gate so the dogs are visible","Wherever is closest to the steward"],"Do not walk on the off-side of the juniors."),
+   Q("In the Best Junior class, which pattern is acceptable?","A simple pattern appropriate for the lowest class, such as a down and back",["A triangle to separate the top handlers","An L pattern","A reverse triangle"],"Triangles and L's are not allowed for Best Junior; keep patterns appropriate for your lowest class."),
+   Q("During the group line-up, a dog is struggling to hold a prolonged stack. How should you evaluate the junior?","Don't penalize the dog's difficulty; reward calm, adaptive support over urgency or repeating what isn't working",["Penalize for the dog's lack of training","Ignore the junior entirely","Reward the junior who keeps repeating the same cue"],"Adapting, reading the dog and moving to Plan B is valuable, while urgency and harshness signal over-focus on winning."),
+   Q("When should you direct the sorting rather than allow self-sorting?","For large, mixed-experience or Novice classes, or when safety requires firm guidance",["When the class is small and experienced","Never; juniors always self-sort","Only in the Best Junior class"],"Self-sorting may suit small, experienced classes like Open or Masters."),
+   Q("Which describes how you should make your placement selections?","Obvious to juniors and audience, for example by naming breeds or pulling to a distinct spot",["A subtle nod toward the junior","Handing ribbons without announcing","Waiting until all juniors have left the ring"],"There is nothing worse than a judge's vague gesture leaving a junior unsure whether they were chosen.")
+  ]
+},
+
+/* ===================== 7 ===================== */
+{ id:7, title:"Patterns & Fair Instructions", sub:"Down and back, triangle, L, showcase, and instructions that give every junior a fair chance",
+  lessons:[
+   { title:"Pattern guide", type:"patterns", html:`
+     <p>The purpose of an individual pattern is to see how effectively the handler presents the dog's structure and movement while keeping control, awareness and breed-appropriate presentation. Tap a pattern for details.</p>` },
+   { title:"What to look for in any pattern", html:`
+     <p><b>Look for:</b></p>
+     <ul><li>Clear understanding of the pattern</li><li>Smooth transitions between set-up and movement</li><li>Speed right for breed, dog and ring size</li><li>The dog positioned between handler and judge</li><li>Straight, purposeful path and balanced stop</li><li>Dog kept on the mats, especially in corners</li></ul>
+     <p><b>Don't reward:</b></p>
+     <ul><li>Mechanical or exaggerated gestures</li><li>Stringing up or racing the dog for animation</li><li>Jerky corrections or tight leads</li><li>Abrupt starts, stops or transitions</li><li>Theatrics, handler between dog and judge</li><li>Cutting corners or leaving mats (a safety issue, especially on slick surfaces)</li></ul>` },
+   { title:"Showcase variations", html:`
+     <ul>
+      <li><b>Implied:</b> “go around to the end of the line.” The junior should know you are still watching and keep showing until you've clearly moved on.</li>
+      <li><b>Designated:</b> “go around and showcase in the corner.” Keep the corner clear, and tell juniors on the line not to interfere.</li>
+      <li><b>After a group line-up:</b> one at a time to a designated spot.</li>
+      <li><b>Part of Best Junior:</b> a down and back with no stop, going on around to present in the corner. This tests whether juniors adapt (does anyone automatically free-stack at the end of the back?).</li>
+      <li><b>Mid-pattern:</b> down, halfway back, showcase, around. Make sure dogs of all sizes can complete it safely.</li>
+     </ul>
+     <p>Asking for a <b>showcase</b> rather than a <b>free stack</b> avoids disadvantaging juniors whose breeds are not traditionally free-stacked.</p>` },
+   { title:"Same instruction is not the same opportunity", html:`
+     <p>Treating everyone identically is not the same as treating everyone fairly.</p>
+     <ul>
+      <li><b>“Free stack your dog.”</b> This favors breeds naturally trained to free-stack (Collie) over hand-stacked breeds (Basset). It's also ambiguous: is tail support allowed for an Afghan?</li>
+      <li><b>“Go down and halfway back and show a side profile across the width of the mat.”</b> A small dog has room; a large dog may be forced to leave the mat, crowd a turn or miss the profile. Fine on a solid surface like carpet, dirt or grass.</li>
+      <li><b>“Present a side profile and keep moving.”</b> If the dog doesn't stop correctly, do they show what the dog offers and go, or fix it? An experienced dog succeeds by luck, while a puppy's junior may be penalized for doing it properly.</li>
+     </ul>
+     <div class="callout"><b>Before you give instructions ask:</b> What am I trying to evaluate? Can every junior and breed reasonably show that skill? Are my instructions complete and clear (when to stop, how long, whether to adjust, when to continue)? Am I rewarding skill or circumstance?</div>` }
+  ],
+  quiz:[
+   Q("Which pattern shows movement going away, on the side and returning?","Triangle",["Down and back","Reverse triangle","Showcase pattern"],"The triangle's purpose is to showcase movement going away, on the side and coming back."),
+   Q("Which classes does the guide recommend the triangle for?","Masters or Open",["Novice only","All classes equally","Best Junior"],"It is a slightly more difficult pattern."),
+   Q("What is the guide's note on the reverse triangle?","It is advanced and NOT a recommended pattern, to be used only when appropriate",["It is the standard Open pattern","It is required in Best Junior","It is easier than the triangle"],"Only for Masters or experienced Open classes, and the guide marks it as not recommended."),
+   Q("In a triangle, a junior moves the dog to their right side for the return leg and you have a clear view. What does the guide say?","Not penalized, provided they transition smoothly afterward",["Penalized for changing sides","Penalized only in Masters","Disqualified from the pattern"],"This presentation can keep the dog's movement steadier and shouldn't be penalized."),
+   Q("During a down and back, a junior lines themselves up with the judge instead of lining up the dog. What is this?","A fault: the dog should be placed directly in the judge's line of sight",["Correct technique","Only a fault for large dogs","A neutral variation"],"Not placing the dog in line with the judge is listed under 'Judges Should Not Reward.'"),
+   Q("You say “go around to the end of the line” and watch a junior's dog all the way there. What should the junior do?","Keep showing until you've clearly moved on to the next dog",["Relax, since the pattern is over","Look away to avoid staring","Ask whether to stack"],"Reading the implied direction is part of Following Directions."),
+   Q("Why can “free stack your dog” create an uneven playing field?","It favors breeds trained to free-stack and may be interpreted differently by different juniors",["It is too easy for every breed","It is only used in Masters","It is prohibited by the AKC"],"The same instruction doesn't create the same opportunity, and juniors must guess your meaning."),
+   Q("You ask juniors to show a side profile across the width of the mat. What is the risk with large dogs?","They may not have room to do it without leaving the mat",["It makes the pattern too easy","Small dogs can't do it","There is no risk"],"This may be fine on a solid surface, but on mats a large dog can't always achieve the profile safely."),
+   Q("A junior cuts corners and takes the dog off the mat onto a slick surface. How is this treated?","As a safety concern that you should not reward",["As a harmless shortcut","As good efficiency in motion","As a neutral style choice"],"It appears under 'Judges Should Not Reward' for any pattern."),
+   Q("Before designing an exercise, what should the judge decide first?","Exactly which handling skill is being evaluated",["Which pattern the juniors know best","How impressive it will look from ringside","Which breed will do it best"],"Then check that every junior has a reasonable opportunity to show that skill.")
+  ]
+},
+
+/* ===================== 8 ===================== */
+{ id:8, title:"Safety, Bait & Physical Handling", sub:"What to stop, what never to reward, and how to say it",
+  lessons:[
+   { title:"Safety faults in the ring", html:`
+     <ul>
+      <li><b>Scooping, plopping or dropping</b> a small dog into place, especially from a height. Never drop a dog into position.</li>
+      <li><b>Body-blocking or shoving</b> a large dog. Lead the dog into position, then adjust. Using the full body, feet or legs to push or brace is faulted.</li>
+      <li><b>Crowding or cutting off</b> others: stopping too close, running up on the dog ahead in group movement, and especially running up on small dogs at the end of the line.</li>
+      <li><b>Distracting others:</b> squeaky toys, excessive baiting or talking, thrown or dropped food.</li>
+      <li><b>Unsafe collar or lead technique:</b> collar too loose or wrongly placed; stringing up a dog, especially if it coughs or chokes.</li>
+      <li>Being unaware of the effect on others (or intentionally interfering).</li>
+      <li>Leaving the mat or cutting corners; unsafe clothing or footwear.</li>
+     </ul>` },
+   { title:"Bait", html:`
+     <p>Bait is a legitimate tool. Don't penalize using bait; judge <b>how</b> it's managed.</p>
+     <ul>
+      <li><b>Throwing bait is never allowed</b> in juniors, in or out of the ring. It can start fights, make dogs lunge, and trip handlers. The guide gives examples of bait landing between two waiting Terriers, and three large dogs lunging for a piece thrown during a fronts check.</li>
+      <li><b>Not on the table or ramp:</b> crumbs and scent distract the next dog, especially scent hounds and small dogs.</li>
+      <li><b>Not on the ground as a target</b> for the dog in the line-up.</li>
+      <li><b>Bait as a tool, not a prop:</b> purposeful position and timing. Waving bait at a dog who isn't looking is habit, not handling. Recognizing it isn't working and moving to Plan B (voice, touch, movement, a toy) is the real skill.</li>
+      <li><b>Reward the dog:</b> constantly promising bait and never delivering will lose the dog's attention.</li>
+      <li><b>“They do it in the breed ring” is not a reason.</b> Juniors are a developmental program, and other juniors may not have the skill to cope when bait lands near their dogs.</li>
+      <li><b>Storage:</b> a pouch, pocket or armband is fine and shouldn't be penalized for being visible. Reaching into undergarments is discouraged for juniors; a junior's comfort and dignity are never a handling fault.</li>
+     </ul>
+     <p>If a junior throws bait: calmly stop it, ask them to retrieve it safely, remind them bait stays in the hand or goes directly to the dog. For example: “Could you please go pick-up your bait as it could be a safety issue? Thank you.” Repeated behavior counts in procedure, sportsmanship and ring awareness, and severe repeated cases may lead to excusal after warnings.</p>` },
+   { title:"Feet and body cues", html:`
+     <p>Footwork and body position are legitimate cues: shifting weight, opening or closing space, subtle pressure. Using a foot or knee to <b>physically make a dog move</b> is not. That includes pushing a hip, sliding a front foot, tapping the stomach, or stomping at the dog.</p>
+     <ul>
+      <li>These actions are quick and hidden. <b>Watch the whole ring</b> with peripheral vision, change where you stand, and look back at the class unexpectedly.</li>
+      <li>A junior who harshly manipulates or intimidates a dog this way <b>should not win and probably should not be in the ribbons</b>.</li>
+      <li>Consider nature, severity and frequency. An accidental bump differs from deliberate use of a foot or knee. Minor but intentional: don't reward. Repeated, forceful or intimidating: address it, possibly speaking with the junior after judging, involving a parent or the show committee, or taking further action if welfare is a concern.</li>
+      <li>Excessive force is grounds for dismissal.</li>
+     </ul>
+     <div class="callout">“Ignoring inappropriate handling teaches the junior that the behavior works. Rewarding it teaches every junior watching that it is acceptable.” Watch for it. Recognize it. Do not reward it.</div>` },
+   { title:"Table, ramp and lead safety", html:`
+     <ul>
+      <li><b>Table check:</b> juniors should quickly confirm stability before placing the dog, because conditions change between dogs. It should be subtle and fluid. Doing it earns no automatic credit; omitting it isn't an automatic penalty. A performative check (repeated pushing, staring at you) can affect the evaluation. Noticing an unstable table and handling it well shows judgment.</li>
+      <li><b>Table positioning:</b> as far forward and toward the judge's side as the junior can <b>safely and effectively control</b>. A smaller junior or an anxious dog may need a position closer to the handler. Judge safety, control, accessibility and correct profile, not distance from the edge.</li>
+      <li><b>Leads:</b> excess lead neatly wound and held in the hand. Wrapping a lead around the hand, wrist or fingers is a safety concern because a lunge can injure the handler.</li>
+      <li><b>Lead or collar off for the exam:</b> acceptable for skilled teams in the right breed. No automatic credit, no automatic penalty, but loss of control is weighed <b>more heavily</b> because the junior chose to give up that control.</li>
+     </ul>` },
+   { title:"Correcting in the ring", html:`
+     <p>Juniors are learning. Correct unsafe or unsportsmanlike behavior in a way that protects dignity and keeps the class fair.</p>
+     <ul>
+      <li><b>Address the behavior, not the child</b>. Keep a calm, conversational tone and keep it brief and instructional.</li>
+      <li>Correct privately or quietly when possible and apply the same standard to everyone.</li>
+      <li>Then <b>continue judging</b>. Don't revisit unless it continues.</li>
+      <li><b>Set expectations early</b> with a short opening announcement (spacing, attention to the dog, safe bait use, sportsmanship), so later corrections can refer back to it.</li>
+      <li><b>Line-watch:</b> while examining one junior, keep monitoring the rest for nose-to-tail dogs, tightening leads, crowding, distracted handlers, and young juniors needing more room. Preventive phrases: “Everyone take one step apart.” “Let's give the next team just a little more room.”</li>
+      <li><b>Safety first:</b> if there is immediate risk to anyone, intervene immediately even if it interrupts judging.</li>
+     </ul>` }
+  ],
+  quiz:[
+   Q("A junior throws bait during the line-up and it lands near the next dog. What is the first step?","Calmly stop the behavior and ask them to retrieve the bait safely",["Excuse the junior immediately","Ignore it and continue","Announce the junior's name to the audience"],"Stop it, retrieve it safely, briefly remind them. Repeats and severe cases may lead to excusal after warnings."),
+   Q("Why is leaving bait on a table or ramp a problem?","It can distract the next dog, especially scent hounds and small dogs",["It makes the table unstable","It is just untidy","It slows the judge's exam"],"Scent, crumbs and residue may make the next dog sniff, lick or search."),
+   Q("A junior waves bait continuously at a dog that isn't looking at it. What does the guide say this shows?","Habit rather than handling skill; the real skill is recognizing it isn't working and adjusting",["Good bait management","Excellent engagement","A safety fault only"],"Bait is a tool, not a prop. Plan B might be voice, touch, movement or a toy."),
+   Q("Someone defends a bait throw by saying “they do it in the breed ring.” What is the guide's position?","That is not sufficient; Junior Showmanship is a developmental program and other juniors may not handle the risk",["It should be allowed for experienced juniors","It is acceptable if the dog catches it","It should be allowed in Masters only"],"The standard you tolerate is the standard juniors will learn to meet."),
+   Q("A junior uses a visible bait pouch rather than reaching into clothing to retrieve bait. How should you treat this?","Do not penalize; a junior's comfort and dignity are never a handling fault",["Penalize for a less polished silhouette","Ask them to hide the pouch","Reward them for professionalism automatically"],"Judge the skill with which bait is managed, not how invisible the storage is."),
+   Q("During your examination of one dog, you notice a junior nudging their dog's hip with a foot to set it. What does the guide say?","Don't reward it; deliberate harsh physical manipulation should not win and probably shouldn't be in the ribbons",["Ignore it as normal handling","Reward it if the stack is correct","Warn only after the class is over"],"Feet and knees are not training tools. Consider severity, intent and frequency."),
+   Q("What is the guide's concern with a lead wrapped around a junior's fingers?","It's a safety risk, as a lunge can cause serious injury and the lead can't be released",["It looks unprofessional only","It blocks the judge's view","It is only a problem on a table"],"Excess lead should be neatly wound and held in the hand."),
+   Q("A junior removes the lead for the individual exam and the dog moves unexpectedly, causing a loss of control. How is this weighed?","More heavily, because they chose a technique that requires greater control",["Less heavily, because the technique is advanced","The same as for a dog on lead","Not at all"],"Any loss of control is a significant deficiency when the junior voluntarily removed a means of restraint."),
+   Q("A smaller junior places a Beagle farther from the judge's side of the table because of limited reach, but the dog is stacked crooked. What should be faulted?","The crooked stack, not the table position",["The table position","Both equally","Neither"],"The guide says she should not be penalized for the safer position; the error is failing to stack squarely."),
+   Q("How should a correction normally be delivered?","Quietly and briefly, addressing the behavior rather than the child, then continue judging",["Publicly, to set an example","As a long lecture to the whole ring","By having the steward handle it"],"A single quiet sentence is often more effective than a lengthy lecture."),
+   Q("Which is the best way to reduce corrections later in the class?","Set expectations early with a brief announcement to all juniors",["Wait and correct each junior individually","Rely on the steward to explain","Remove the junior who first breaks a rule"],"Early expectations let you refer back to them without singling anyone out.")
+  ]
+},
+
+/* ===================== 9 ===================== */
+{ id:9, title:"Exams Surface by Surface", sub:"Stacking technique, table, ramp, floor and oral-exam wording (Exhibits A and B)",
+  lessons:[
+   { title:"General stacking technique", html:`
+     <p>The general technique, which applies to all breeds, runs in a set order:</p>
+     <ol>
+      <li><b>Front feet first, then rear feet.</b></li>
+      <li><b>Left front with the left hand; right front with the right hand.</b> Both rears are set with the left hand.</li>
+      <li>Fronts are lifted from the <b>elbow</b>; rears are lifted at the <b>hock</b>.</li>
+      <li><b>Head control</b> is maintained throughout the set-up.</li>
+     </ol>
+     <p>Result: front feet appropriately wide, rear showing proper angulation, natural head, appropriate topline, correct expression/ear set and tail carriage. Lead is draped out of the way, wound in the hand, or at a suitable length for a free stack. The dog is never left entirely unsupported.</p>
+     <p><b>Common faults:</b></p>
+     <ul><li>Moving a slightly-back foot <b>forward</b> to straighten (it is generally better to move the most forward foot back, since the first often causes posting)</li><li>Not changing hands for the front feet</li><li>Fronts too wide/close; rears under-stacked or over-stretched</li><li>Reaching under to set feet (except for some larger breeds)</li><li>Setting both fronts at once (some small toys excepted)</li><li>Hovering or leaning into the dog's space, blocking the judge</li><li>Unsteady head while setting rear feet</li><li>Resetting every foot the same way every time, which shows pattern knowledge, not evaluation</li><li>Wrong bite presentation, or feeding bait just before the bite exam</li></ul>` },
+   { title:"Table breeds", html:`
+     <p><b>Correct:</b> quiet table check; safe two-handed lift; dog near the front edge and as close to the judge's side as can be <b>safely and effectively controlled</b>; dog square; junior positioned for easy adjustment; controlled removal (no swinging; collar placed for control before setting down); dog confident and comfortable.</p>
+     <p><b>Faults:</b></p>
+     <ul><li>Dramatic or performative table check</li><li>Unsafe or rushed lift on or off; dropping the dog harshly</li><li>Dog too far back, too near the edge, or too far from the junior to control</li><li>Dog not square</li><li>Over-baiting, crowding, constant repositioning</li><li>Letting go of the dog completely; lead dangling in front or blocking your view</li><li>Releasing the dog before you've finished and moved away</li><li>Bait or grooming tools placed on the table</li></ul>` },
+   { title:"Ramp breeds", html:`
+     <p><b>Correct:</b> approach the ramp calmly and straight on; light, even lead pressure; all feet on the flat top before stacking; dog placed where weight is best distributed, over the ramp supports and in the middle. <b>On the ramp, centered weight matters more than the front or the judge's side.</b> Junior steps aside to give you access; guides the dog down until all feet reach the ground.</p>
+     <p><b>Faults:</b></p>
+     <ul><li>Rushing or pulling the dog up</li><li>Dog off-center so weight isn't balanced</li><li>Dog allowed to jump off the side</li><li>Handler between you and the dog</li><li>Dog too far back</li><li>Leaning over the dog</li><li>Over-baiting or sharp tugs to get the dog onto the ramp</li><li>Lunging descent</li></ul>` },
+   { title:"Floor breeds", html:`
+     <p><b>Correct:</b> controlled approach to the exam position; dog stacked at the edge of the mat closest to you, straight and aligned; the junior guides and stops the dog so little adjustment is needed; natural head and expression; fronts and rears set without feet or knees under the dog; clear, unobstructed side and front views; lead excess gathered neatly (not dangling, which disrupts the outline in juniors even if seen in the breed ring).</p>
+     <p><b>Faults:</b></p>
+     <ul><li>Dog crooked on the mat or angled wrongly</li><li>Junior standing or baiting directly in front, blocking the view</li><li>Dog off the mat, or fidgeting without need</li><li>Head pulled unnaturally high, or posted from an over-extended rear</li><li>Messy lead</li><li>Wrong stance for breed</li><li>Bumping or pushing to set the rear</li><li>Bait use so heavy that the dog shifts while chewing</li></ul>` },
+   { title:"Ringside quick reference: equipment and oral exams", html:`
+     <ul>
+      <li><b>Keep the ring clear:</b> less furniture is safer and faster.</li>
+      <li><b>Ramp-optional breeds:</b> you needn't bring a ramp in if the breed's permitted alternate surface is available. You <b>must</b> provide the ramp for ramp-mandatory breeds. If a class has both, the ramp is already in the ring and you may let the junior choose or assign the surface.</li>
+      <li><b>Oral exam wording:</b> avoid “show me the bite,” “show me the teeth,” or “open the mouth,” which may give away what the junior should know. Use a neutral request: “Please present your oral exam appropriate for your breed,” “Oral exam, please,” or “Show me the oral exam, please.” (Some juniors take instructions very literally.)</li>
+      <li><b>Exam codes:</b> Front (F), Front and Sides (F/S), Front and Open (F/O), Front, Sides and Open (F/S/O), or Thumb (T).</li>
+      <li><b>Thumb exam (T) breeds:</b> the junior demonstrates or explains the presentation. You don't perform it, and the junior shouldn't substitute opening the mouth.</li>
+     </ul>` }
+  ],
+  quiz:[
+   Q("In the general stacking technique, which feet are set first?","Front feet, then rear feet",["Rear feet, then front feet","Both at once","Whichever the dog offers"],"General technique is front first, then rear."),
+   Q("Which hand sets the left front foot?","The left hand",["The right hand","Either, depending on the breed","The hand holding the lead, always"],"Left front with left hand, right front with right hand."),
+   Q("Where should a front foot be lifted from, and where a rear foot?","Front: the elbow. Rear: the hock",["Front: the wrist. Rear: the stifle","Both: the paw","Front: the shoulder. Rear: the hip"],"Fronts are set by lifting from the elbow; rears from the hock."),
+   Q("A dog's rear foot is slightly back. What is generally better?","Move the most forward foot back to match",["Move the back foot forward","Move both forward","Leave it and re-bait"],"Moving the slightly-back foot forward often results in posting."),
+   Q("On a ramp, which positioning concern outranks being near the front or judge's side?","Centered, balanced weight distribution",["Being closest to the judge","Facing the gate","Placing the dog at the far end"],"Weight distribution is more important on the ramp than front-of-ramp or judge's side."),
+   Q("A ramp-optional breed is entered. Must you bring in a ramp?","No, if the breed's alternate permitted surface is available",["Yes, always","Only for Masters","Only if the junior asks"],"You must provide the ramp for ramp-mandatory breeds."),
+   Q("Which wording is best for asking for the bite?","“Oral exam, please”",["“Show me the teeth”","“Open the mouth”","“Show me the bite”"],"Neutral wording avoids telling the junior which exam the breed needs."),
+   Q("For a Thumb (T) exam breed, what should the junior do?","Demonstrate or explain the thumb presentation rather than opening the dog's mouth",["Open the dog's mouth for you","Skip the oral exam","Let you perform it"],"The junior shouldn't substitute opening the mouth for the required thumb exam."),
+   Q("For a floor breed, where should the dog be stacked for the individual exam?","At the edge of the mat closest to the judge, straight and aligned",["Anywhere near the center of the ring","With the junior in front blocking the head","At the far edge of the mat"],"This gives a clear side and front view."),
+   Q("Which is a table-breed fault?","Placing bait or grooming tools on the table",["A quiet, quick table check","A two-handed lift","Controlling the dog's position safely"],"It can interfere with the exam and leave residue for the next dog."),
+   Q("When removing a dog from the ramp, what should the junior do?","Gently guide it down, making sure all four feet reach the ground",["Let it jump off the side","Lift it quickly over the side","Move straight into gaiting"],"Jumping or lunging off the ramp is a fault.")
+  ]
+},
+
+/* ===================== 10 ===================== */
+{ id:10, title:"Professional Responsibilities", sub:"Feedback, conflicts of interest, spectators, administration, timing and readiness",
+  lessons:[
+   { title:"Giving feedback", html:`
+     <p>Offer brief, educational comments after class when asked, especially for Novice and newer juniors. Reinforce what they did well and give <b>what you'd like to see</b>, not just what went wrong. Focus on skill and execution, not personal evaluation.</p>
+     <p>Examples of reframing:</p>
+     <ul>
+      <li>“You moved too fast” becomes “Work on finding a good speed for your dog that keeps the topline level and the movement balanced.”</li>
+      <li>“You blocked my view” becomes “You showed calm control. Watch that the lead doesn't cross in front of the head.”</li>
+      <li>“You crowded the team in front” becomes “Beautiful teamwork. Give yourself a little more space from the dog in front.”</li>
+     </ul>
+     <p><b>Avoid:</b></p>
+     <ul>
+      <li><b>“Smile more,” “have fun,” “you seemed nervous,” “show more personality.”</b> They aren't actionable and can penalize introverted, anxious or neurodivergent juniors. Tie it to a handling skill instead (for example, more connection and engagement with the dog).</li>
+      <li><b>Comments on attire,</b> except for a safety concern (slippery shoes, hair blocking vision). If something is truly inappropriate, address it respectfully through the accompanying adult.</li>
+      <li><b>Criticizing a junior for the dog they were given.</b> If a small child can't safely manage a large powerful dog, speak with the parent, guardian or coach about safer options.</li>
+     </ul>
+     <p>If a very strong junior asks for feedback and you saw no technical faults, say so, and explain that the decision came down to very fine details, like one team's movement catching your eye a little more. For whole-class feedback (common in Novice), give one or two sentences of praise plus one or two broadly useful items. Keep individual critiques until judging is finished.</p>` },
+   { title:"Conflicts of interest", html:`
+     <p>You must maintain actual <b>and perceived</b> impartiality. Recuse or excuse a junior if you have:</p>
+     <ul><li>Mentored, trained, or handled/assisted them under your guidance</li><li>Owned, co-owned, lived with, bred, bred-to, leased, campaigned or handled the dog</li><li>An immediate family or household connection</li><li>A supervisory or coaching role in the same local club or training group</li><li>Given paid or volunteered handling lessons (excluding junior workshops at shows)</li><li>A close personal relationship (frequent socializing, travel, setting up together, family friendship)</li></ul>
+     <p><b>Best practice:</b> if unsure, err toward caution. You may set stricter personal boundaries than the AKC. The standard is whether <i>a reasonable person could question whether impartiality might be compromised.</i></p>
+     <p><b>How:</b> disclose expectations early. If such a junior enters, tell the class to relax, call the AKC Representative to help excuse them, or, if unavailable, pull the junior aside and explain. You can show the audience there is nothing wrong by inviting them to the center, shaking hands, and sending them out with applause.</p>` },
+   { title:"Spectators, applause and the Field Representative", html:`
+     <ul>
+      <li><b>Coaching from ringside</b> (verbal, visual or gestural) isn't permitted once the class begins, and juniors shouldn't look ringside for direction. You can issue a general verbal warning. Balance this for novices: a parent quietly reminding a new junior about spacing or collar position for safety is different from presentation coaching, which should be highly discouraged.</li>
+      <li><b>Clap for one, clap for all:</b> applause is offered equally, typically while teams move, at the end of a class or after placements. Favoritism cheering isn't appropriate. A brief opening announcement helps.</li>
+      <li><b>Call the AKC Field Representative and/or Show Chair</b> for: a potential conflict of interest; a junior who can't safely control their dog; a bitch in season (halt the class and excuse the junior, which violates the regulations); inappropriate conduct by parents, spectators or others. A witness protects the junior, the judge and the integrity of the program.</li>
+     </ul>` },
+   { title:"Administration and timing", html:`
+     <ul>
+      <li><b>Check in</b> with the Superintendent well before your time. Confirm ring, start time and the breed breakdown. If you are Provisional and scheduled to be observed, find the AKC Representative early. Look at the breeds entered so you can arrange equipment.</li>
+      <li><b>Working with your steward:</b> brief them on how you'll run the class, where to place the initial line-up, and equipment timing. The steward manages the gate, armbands, absences, equipment and ribbons. The steward must not coach juniors, tell them what you look for, suggest patterns or comment on performance.</li>
+      <li><b>Your judge's book:</b> confirm classes and placements. Verify armbands yourself, mark present juniors with a checkmark and absences ABS, record start and finish times, sign the book, and double-check placements. Ask the Superintendent or Representative rather than improvising a correction.</li>
+      <li><b>Ribbons for class placements:</b> 1st rose/pink, 2nd brown, 3rd light green, 4th gray. Award Best Junior first, then bring back the second-place junior from that class for Reserve.</li>
+      <li><b>Timing:</b> 20 juniors per hour, which is <b>three minutes per junior</b> (versus two in the breed ring). Re-sorting and individual exam set-up use up much of that extra minute.</li>
+     </ul>
+     <div class="callout"><b>The guide's math.</b> Entry of 35 juniors (Masters 2, Open Senior 10, Open Intermediate 12, Open Junior 7, Novice Intermediate 1, Novice Junior 3) at 3 minutes each is 1 hour 45 minutes. Re-sorting at about 10 seconds per class and exam set-up at about 10 seconds per junior eats roughly 7 minutes. If the entry is large, <b>simplify rather than rush</b>.</div>` },
+   { title:"Are you ready? Saying “not yet”", html:`
+     <p>Large Junior Showmanship assignments at major shows are not entry-level. Judges without junior experience risk getting lost in the class, shifting criteria mid-class, over-rewarding flash, and mismanaging time.</p>
+     <p><b>A recommended progression:</b></p>
+     <ol><li>Local specialty shows (small entries, similar breeds)</li><li>Local all-breed shows (more breeds, manageable classes)</li><li>Larger specialty or group shows</li><li>Medium-sized all-breed shows</li><li>Major shows with large entries or big stakes prizes</li></ol>
+     <p><b>Exceptions</b> may include former top-winning juniors with deep understanding of evaluation, professional handlers with extensive junior mentorship, experienced breed judges who can separate technically equal juniors, or mentors who have coached many juniors to high-level success. Even then, they are exceptions, and prior participation alone does not equal readiness.</p>
+     <p>Declining an assignment you aren't ready for is <b>professionalism, not failure</b>. Judges owe juniors consistency, preparedness, clear fair evaluation, and understanding of how critical big events are.</p>` }
+  ],
+  quiz:[
+   Q("A judge wants to say “you should smile more.” What does the guide recommend instead?","Tie the comment to a specific handling skill, such as more connection and engagement with the dog",["Say it as written","Skip all feedback","Ask the parent to tell the junior to smile"],"Smiling alone is not the skill and may penalize introverted or neurodivergent juniors."),
+   Q("A small child is struggling to control a large, powerful breed. How should you handle feedback?","Speak with the parent, guardian or coach about safer options",["Criticize the junior in front of the class","Place them last","Give no feedback and no safety concern"],"The focus should be safety, learning and confidence, not criticism of a junior who may not have chosen the dog."),
+   Q("When are comments on a junior's attire appropriate?","Rarely, for a safety concern like slippery shoes or hair blocking vision",["Any time something looks unfashionable","Whenever the outfit isn't expensive","At the start of every class"],"If something is truly inappropriate, address it respectfully through the accompanying adult."),
+   Q("Which situation requires you to recuse or excuse a junior?","You gave the junior paid or volunteered handling lessons (excluding show workshops)",["The junior is from your state","The junior's dog is the same breed as one you own","You've judged the junior once before"],"Lessons are listed among the conflicts; use caution where a reasonable person could question impartiality."),
+   Q("A junior you've bred to enters your ring. What is the best course?","Tell the class to relax and call the AKC Representative to help excuse the junior; if unavailable, speak to the junior privately and send them out with respect",["Judge them normally and be extra strict","Judge them and say nothing","Ask them to enter a different class"],"Disclose early and handle respectfully so the audience knows nothing is wrong with the junior or dog."),
+   Q("A parent shouts presentation directions from ringside mid-class. What can you do?","Issue a general verbal warning that coaching from ringside is not permitted",["Ignore it","Excuse the junior at once","Ask the steward to explain"],"Safety reminders for novices differ from presentation coaching, which should be highly discouraged."),
+   Q("A bitch in season is presented in your ring. What should you do?","Halt the class and excuse the junior, as this violates regulations",["Place the junior last","Continue judging and mention it afterward","Let them finish the individual exam only"],"The guide lists this among situations to involve the Field Representative."),
+   Q("What is the AKC standard judging rate for juniors?","20 juniors per hour, or 3 minutes per junior",["30 per hour","2 minutes per junior","15 per hour"],"The breed ring goal is two minutes. Junior-specific tasks like re-sorting and exam set-up use much of the extra minute."),
+   Q("What colors are the ribbons for 1st through 4th in regular Junior Showmanship classes?","Rose/pink, brown, light green, gray",["Blue, red, yellow, white","Purple, blue, red, yellow","Rose, brown, gray, light green"],"First Rose/Pink, Second Brown, Third Light Green, Fourth Gray."),
+   Q("Which is the steward NOT supposed to do?","Tell juniors what you look for or suggest patterns",["Check armbands and call absences","Move equipment","Have ribbons ready in order"],"A steward should not coach, direct presentation, comment on performance or otherwise influence the class."),
+   Q("When you mark your judge's book, what must you do?","Verify armband numbers yourself and clearly mark present and ABS juniors",["Rely on the steward's list of absences","Mark only the placed juniors","Leave signing to the Superintendent"],"Don't rely on the steward to tell you who is present, and sign the book."),
+   Q("What is the first stage of the guide's recommended judging progression?","Local specialty shows with smaller entries",["Major shows with large entries","Medium all-breed shows","Group shows"],"The progression builds from small local specialties up to major assignments.")
+  ]
+}
+);
+
+/* ---------- FLASHCARDS ---------- */
+const CARDS = [
+ ["Age range of Junior Showmanship","9 through 18"],
+ ["Purpose of Junior Showmanship (one line)","Evaluate the handler's skill in presenting a dog to its best advantage, with a positive, respectful attitude toward the dog and other participants."],
+ ["Dog's role in the team","A valued partner, never a prop."],
+ ["Weight: Correct & Breed-Specific Presentation","30%"],
+ ["Weights: Highlight Virtues; Efficiency in Motion","15% each"],
+ ["Weights: Following Directions; Handling Style","12% each"],
+ ["Weights: Safety; Sportsmanship","10% and 5%"],
+ ["Why the weights add to 99%","Rounded for simplicity; relationship/partnership with the dog is the suggested element for the last 1%."],
+ ["Which categories should drive placements?","Correct Presentation, Highlight Virtues/Minimize Faults, Efficiency in Motion."],
+ ["Role of Safety and Sportsmanship","Pass/fail style modifiers; egregious or repeated issues can take a skilled handler out of the running."],
+ ["Role of Following Directions and Handling Style","Reward poise and professionalism; may decide how placements are distributed or break ties."],
+ ["Core principle of 'Correctness Before Preference'","Technical correctness comes before stylistic or breed-tradition choices."],
+ ["How to judge hand-stack vs free-stack","By the quality of execution, not the method chosen."],
+ ["Only when may breed stylistic preference matter?","As a secondary factor when presentations are equally clean and technically correct."],
+ ["GSD standard and lead","Shown at a trot on a loose lead; standard-defined, so reward moderate pace and loose lead over flashy speed with tension."],
+ ["Afghan Hound 'stands naturally'","Excessive hand-stacking can interfere; small purposeful adjustments are not penalized."],
+ ["Beagle ear presentation","Dropped, relaxed ears fit the standard's soft, pleading expression; don't assume wrong."],
+ ["Push-button dog","Don't penalize making it look easy. Do judge the junior's actual contribution if the dog self-corrects unaware of the junior."],
+ ["Difficult dog","No automatic extra credit; skillful, calm, persistent problem-solving can be rewarded."],
+ ["The question for movement evaluation","Does this junior's body position, lead management, pace and stride create an appropriate, technically effective presentation of this dog?"],
+ ["Sign movement is overshadowing the dog","You notice the junior more than the dog, or hear them approaching."],
+ ["Rehearsed check-ins and forced eye contact","Not rewarded just for happening; only purposeful when confirming instruction or locating the judge."],
+ ["Best Junior and age/potential/visibility","None of them influence placements; only demonstrated skill that day."],
+ ["Order of awards","Best Junior first; then the second-place junior from the same class as Best Junior returns to compete for Reserve."],
+ ["Minimum elements of every class","Group movement, individual exam, individual movement, group presentation (stacked on the line)."],
+ ["Optional elements","Individual showcase presentation; group comparative exercises."],
+ ["Cuts","Pull at least four from each group; final group ideally at least six."],
+ ["Late arrivals","May enter as long as cuts or placements have not begun, especially if the conflict was communicated."],
+ ["Junior excused mid-class","Cannot re-enter the class."],
+ ["Judge's position cardinal rule","Stay to the center; never walk on the off-side between juniors and the ring gate."],
+ ["Equipment cardinal rule","Never gait juniors past in-ring equipment; never examine or touch table/ramp breeds on the ground."],
+ ["Best Junior patterns","Keep to the lowest class level; no triangles or L's."],
+ ["Triangle","Away, side, return. Masters or Open."],
+ ["Reverse triangle","Advanced, not recommended; Masters or experienced Open."],
+ ["L pattern","Advanced; Masters or very experienced Open; not for Best Junior."],
+ ["Showcase vs free stack","Asking for a showcase avoids disadvantaging breeds not traditionally free-stacked."],
+ ["Same instruction, same opportunity?","No. Design exercises that give every junior and breed a fair chance to show the skill."],
+ ["Throwing bait","Never allowed in or out of the ring."],
+ ["Bait on table, ramp or ground","Not allowed; distracts and endangers other dogs."],
+ ["'They do it in the breed ring'","Not a reason; Juniors is a developmental program."],
+ ["Bait storage","Pouch, pocket or armband is fine; reaching into undergarments is discouraged for juniors."],
+ ["Feet and knees on a dog","Not training tools. Deliberate harsh use should not win and probably shouldn't ribbon; excessive force is grounds for dismissal."],
+ ["Table check","Quick and subtle; no automatic credit for doing it or penalty for omitting; performative checks may hurt."],
+ ["Table positioning","As far forward and toward the judge's side as the junior can safely and effectively control."],
+ ["Ramp positioning","Centered, balanced weight matters more than front or judge's side."],
+ ["Lead management","Excess lead neatly wound in the hand; wrapped around hand or fingers is a safety concern."],
+ ["Lead or collar off for the exam","No automatic credit or penalty; any loss of control weighs more heavily."],
+ ["General stack order","Front feet first, then rear. Left front/left hand; right front/right hand; both rears with left hand. Lift fronts at the elbow, rears at the hock."],
+ ["Better way to fix a slightly-back foot","Move the most forward foot back; moving the back foot forward often posts the dog."],
+ ["Oral exam instruction","Neutral: “Oral exam, please.” Don't say 'show me the bite'."],
+ ["Oral exam codes","F, F/S, F/O, F/S/O, T (thumb)."],
+ ["Thumb (T) exam","Junior demonstrates or explains; the junior doesn't open the mouth in its place."],
+ ["Feedback style","Give what you'd like to see; focus on skill; avoid 'smile more' or attire comments (except safety)."],
+ ["Mismatched dog and junior","Talk with the responsible adult, not the child."],
+ ["Conflict-of-interest test","Could a reasonable person question whether impartiality might be compromised?"],
+ ["Ringside coaching","Not permitted once class starts; judge may warn. Safety reminders for novices differ from presentation coaching."],
+ ["Clap for one, clap for all","Applause offered equally; no favoritism cheering."],
+ ["Bitch in season","Halt the class and excuse the junior; call the Field Representative."],
+ ["Timing","20 juniors per hour = 3 minutes each (breed ring: 2)."],
+ ["Class ribbons","1st rose/pink, 2nd brown, 3rd light green, 4th gray."],
+ ["Judge's book","Verify armbands; check present, mark ABS; record times; sign."],
+ ["Steward's limits","No coaching, no telling juniors what you look for, no suggesting patterns or commenting on performance."],
+ ["Judging readiness","Build gradually from local specialties to major shows; saying 'not yet' is professionalism."]
+];
+
+/* ---------- SCENARIOS ---------- */
+const SCEN = [
+ { t:"Bait in the air", s:"During the group line-up, a junior tosses a piece of bait to their dog. The dog misses it and it lands two feet from the next team. What do you do?",
+   o:["Excuse the junior immediately","Calmly stop it, ask them to pick it up safely, remind them bait stays in hand or goes straight to the dog, and let the next team refocus","Ignore it, because nobody was hurt","Wait until the class is over and then tell the parent"],
+   c:1, why:"Stop it immediately, retrieve safely, and give a brief reminder. Give the affected team time to refocus. Repeats after correction count against procedure, sportsmanship and ring awareness; excusal is for severe, repeated cases after warnings." },
+ { t:"The quick foot", s:"While you examine the dog at the head of the line, you glance back and see a junior sliding a foot against their dog's hip to move it into position. The stack ends up perfect. How does this affect their placement?",
+   o:["No effect, because the stack is correct","It's a minor technicality and wouldn't affect anything","If deliberate, don't reward it; if forceful or repeated, address it. The junior should not win and probably should not ribbon","Excuse the junior in front of the class"],
+   c:2, why:"Feet and knees are not training tools. A deliberate, harsh physical manipulation is a significant failure of handling and sportsmanship, even when the result looks polished. Consider severity and frequency." },
+ { t:"Four ways to stack", s:"Four juniors in a breed where hand-stacking is common. A hand-stacks, but the dog never settles into the breed outline. B free-stacks a correct outline with small timely adjustments. C is extremely confident with constant eye contact, but the dog is A-framed. D smiles and talks to the dog nonstop, but the dog fidgets. On the stacking element, who leads?",
+   o:["A, because it's the traditional method","B, whose execution produces the correct outline","C, because confidence is what the ring sees","D, because the dog seems happiest"],
+   c:1, why:"Execution over method. Confidence is not correctness, and charm is not technique." },
+ { t:"The unfamiliar ears", s:"You're an erect-ear-breed specialist. In a Beagle class, a junior consistently shows the dog with relaxed, dropped ears and the topline and angles are correct. You're inclined to fault the expression. What should you do?",
+   o:["Fault it, since the ears are wrong","Treat it as neutral unless you know for sure; the Beagle standard describes a soft, pleading expression","Ask the junior to explain during the class","Reward it for being unusual"],
+   c:1, why:"If a presentation is consistent and results in a structurally correct dog, assume it's correct. If you aren't sure, treat it as neutral." },
+ { t:"Different dogs, one group", s:"Your class includes a Great Dane, a Papillon and a Beagle. You're about to run the class around the ring together. A table sits in one corner. What do you do?",
+   o:["Run them in catalog order past the table","Resort by size and gait speed, and walk them past the table or have it removed first","Let the Great Dane lead","Skip group movement"],
+   c:1, why:"Two cardinal rules: move the class as a group, resorting by size and speed when needed; never run juniors past in-ring equipment." },
+ { t:"Raising the difficulty", s:"In Best Junior, your top three are separated by almost nothing. You want to add a triangle or L pattern to see who rises. Is this a good idea?",
+   o:["Yes, harder patterns separate skill","No; Best Junior patterns should stay appropriate for your lowest class. Try a showcase variation instead","Yes, but only an L pattern","Yes, if you warn them first"],
+   c:1, why:"Triangles and L's aren't allowed in Best Junior. A showcase twist (such as down and back with no stop, then showcase) tests adaptability without escalating difficulty." },
+ { t:"Voice from the rail", s:"A parent keeps calling “Head up! Feet!” to a junior during the individual exam. What now?",
+   o:["Excuse the junior","Give a general reminder that ringside coaching isn't permitted during judging","Say nothing and judge the junior harder","Ask the steward to remove the parent"],
+   c:1, why:"A short, neutral warning to everyone is appropriate. A quiet safety reminder to a novice differs from presentation coaching, which should be highly discouraged. Document significant conduct to the Field Representative." },
+ { t:"A familiar name", s:"As class begins you realize a junior in your ring took paid private handling lessons from you last year. What do you do?",
+   o:["Judge them normally to avoid embarrassing them","Judge them with extra strictness","Tell the class to relax, call the AKC Representative to help excuse the junior, and, if needed, send them out with a handshake and applause","Wait to see how they do in the first pattern"],
+   c:2, why:"Paid or volunteered lessons are listed conflicts. The standard is perceived impartiality, and showing respect helps the audience understand nothing is wrong with the junior or dog." },
+ { t:"Short reach", s:"A small junior places her Beagle on the table farther from the judge's side than usual, and the dog is stacked slightly crooked. A taller junior placed his Beagle at the front edge, stacked square. What should be faulted in the first case?",
+   o:["Table position","The crooked stack","Both equally","Neither, since she is small"],
+   c:1, why:"Position is only a concern when it affects safety, access, control or adaptability. She shouldn't be penalized for a safer position; the crooked stack is the real error." },
+ { t:"After class", s:"A Novice junior asks for feedback. You noticed that her dog's topline was lovely, but she moved quickly and the topline fell apart on the down and back. Which comment fits the guide best?",
+   o:["“You moved too fast.”","“You should smile more and look less nervous.”","“Your stack was lovely. Work on finding a speed that keeps the topline level on the down and back.”","“Your dog isn't right for you.”"],
+   c:2, why:"Praise what worked, then give what you want to see: a specific, controllable skill. Avoid subjective comments about personality." }
+];
+/* ---------- extra widget data ---------- */
+const PATTERNS = [
+ { n:"Down and Back", who:"All classes", purpose:"Straight, consistent, breed- and dog-appropriate movement going away and coming back, plus handler control.",
+   look:["Straight line away and back, dog in the judge's line of sight","Correct gait and tempo for the breed","Smooth turns ending with the dog directly in front of the judge","End presentation (free stack or assisted) matching your direct or implied instruction"],
+   not:["Excessive circling or courtesy turns, especially off the mat","Junior lines themselves up with you instead of lining up the dog","Wandering line","Flash speed that causes convergence or paddling","Handler between judge and dog","A side-view finish that comes off the mat or over/under-rotates","Side view when you signaled head-on"] },
+ { n:"Triangle", who:"Masters or Open", purpose:"Shows movement going away, on the side, and coming back. Slightly harder.",
+   look:["Uses the full length of the ring and corners without breaking stride","Speed suited to each leg (slower going away than on the side)","Presents the dog's best side and speed on every leg","Dog on the left, except a junior may elect the right side for the return leg if your view is clear and the transition is smooth"],
+   not:["Cutting corners or uneven speed","Wide, sloppy turns or sudden stops","Blocking your view on any leg","Inconsistent movement within a leg"] },
+ { n:"Reverse Triangle", who:"Masters or experienced Open (not recommended)", purpose:"A triangle where the junior must switch the dog to the right side on the second leg to keep your view.",
+   look:["Everything for the triangle","Smooth switch to the right side before leg 2","Smooth return to the left before leg 3 (if elected) and after the free stack"],
+   not:["Cutting corners or inconsistent speed","Wide sloppy turns, sudden stops","Obstructing view during movement"] },
+ { n:"L Pattern", who:"Masters or very experienced Open; never Best Junior", purpose:"Control and precision through sharp turns: away, side gaiting in two directions, then back toward the judge.",
+   look:["Crisp turns without breaking the dog's stride","Consistent attention between dog and handler","Smooth lead transitions, especially to the off-side","Smooth re-stack at the end, aware of your position"],
+   not:["Over-handling the turn (too fast, jerky, sling-shot)","Sudden lead tightening or lost rhythm","Cutting corners or not using the full ring","Not moving the dog to the off-side to keep your view","Rushing or pausing to re-cue"] },
+ { n:"Showcase", who:"Optional, any class", purpose:"Lets the junior show the dog's best movement and presentation style.",
+   look:["Logical, well-executed pattern at the right speed","Cues and transitions the dog to slow or stop at the chosen spot","Correct, breed-specific outline","Awareness of ring space and your position","Seamless transitions"],
+   not:["Poor movement into the showcase","Not preparing the dog to slow or stop","A poorly angled showcase (heavy on head or rear instead of a clean side)","Stopping too far in front of or past the designated point","Handler or lead blocking the dog","Dog not set correctly","Coming off mats or crowding other teams","Theatrics"] }
+];
+
+const PHASES = [
+ ["Class entry","Prompt, attentive entry; number visible; spacing; calm dog; prepared","Directions · Safety/Sportsmanship · Style"],
+ ["Class organization","Responds to resorting; awareness of space; composure with other teams; doesn't argue for position","Directions · Safety/Sportsmanship · Style"],
+ ["Group movement","Listens; spacing; control with teams in front and behind; times best presentation to your position; controlled stop","Correct Presentation · Virtues · Style · Safety/Sportsmanship"],
+ ["General impression","Clean, brushed dog with trimmed nails, clear eyes; neat, safe attire. Forgive learning-based grooming errors. Correct presentation outranks polish","Correct Presentation · Style · Safety"],
+ ["Individual exam","Breed-appropriate set-up; efficient transitions; calm; respectful handling; polite replies","Correct · Virtues · Style · Directions · Safety"],
+ ["Individual movement","Accurate pattern; pacing and lead control; dog visible; unprompted adjustments; clean stops; smooth return to line","Correct · Virtues · Style · Directions · Safety/Sportsmanship"],
+ ["Showcase (optional)","Use of space; position relative to you; quick optimal set with minimal effort","Virtues · Style · Directions"],
+ ["Waiting on the line","Control and focus without showboating or checking out; readiness; spacing; courteous tool use","Safety/Sportsmanship · Style · Directions"],
+ ["Group line-up","Presentation held under pressure and close quarters; adapts as the dog tires; doesn't get urgent or harsh","All five main categories"],
+ ["Group comparative (optional)","Follows new instructions; adjusts quickly; reads what you're evaluating (fronts, rears, expression)","All five main categories"]
+];
+
+/* ---------- state ---------- */
+const KEY = "jsj-judging-course-v1";
+function defaults(){ return { mods:{}, known:{}, scen:{}, exam:{ best:0, count:0, last:null } }; }
+function load(){ try{ const r = localStorage.getItem(KEY); if(r){ const o = JSON.parse(r); return Object.assign(defaults(), o); } }catch(e){} return defaults(); }
+let S = load();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function ms(id){ if(!S.mods[id]) S.mods[id] = { lesson:0, seen:0, best:null }; return S.mods[id]; }
+
+/* ---------- helpers ---------- */
+const $app = document.getElementById("app");
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+const RC = ["", "#E0709A", "#7B4B2A", "#8CC77A", "#9AA3A0"];
+const PLACE = ["","First place","Second place","Third place","Fourth place"];
+function placing(p){ return p>=90?1 : p>=80?2 : p>=70?3 : p>=60?4 : 0; }
+function ribbon(n, size){
+  size = size||28; const c = RC[n];
+  return '<svg width="'+size+'" height="'+Math.round(size*1.25)+'" viewBox="0 0 32 40" role="img" aria-label="'+PLACE[n]+' ribbon"><path d="M9 22 L4 38 L11 34 L15 39 L18 22Z" fill="'+c+'" opacity=".85"/><path d="M23 22 L28 38 L21 34 L17 39 L14 22Z" fill="'+c+'" opacity=".85"/><circle cx="16" cy="14" r="12" fill="'+c+'"/><circle cx="16" cy="14" r="7" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="1.5"/></svg>';
+}
+function allQuestions(){ const out=[]; MODS.forEach(m=>m.quiz.forEach(q=>out.push(Object.assign({mod:m.id},q)))); return out; }
+function prep(q){
+  const opts = shuffle([q.c].concat(q.w)); return { p:q.p, opts:opts, ci:opts.indexOf(q.c), why:q.why, mod:q.mod };
+}
+function setNav(id){
+  ["home","cards","scenarios","exam"].forEach(k=>{ const b = document.getElementById("n-"+k); if(b){ if(k===id) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); } });
+}
+function go(h){ if(location.hash === "#"+h) route(); else location.hash = h; }
+function totalLessons(){ return MODS.reduce((a,m)=>a+m.lessons.length,0); }
+
+/* ---------- routing ---------- */
+let CTX = {};
+function route(){
+  const h = (location.hash||"#home").slice(1);
+  window.scrollTo(0,0);
+  let m;
+  if(h==="cards"){ setNav("cards"); return renderCards(); }
+  if(h==="scenarios"){ setNav("scenarios"); return renderScen(); }
+  if(h==="exam"){ setNav("exam"); return renderExamStart(); }
+  if((m = /^module-(\d+)-quiz$/.exec(h))){ setNav("home"); return startModuleQuiz(+m[1]); }
+  if((m = /^module-(\d+)$/.exec(h))){ setNav("home"); return renderModule(+m[1]); }
+  setNav("home"); return renderHome();
+}
+window.addEventListener("hashchange", route);
+document.addEventListener("click", function(e){
+  const g = e.target.closest("[data-go]"); if(g){ go(g.getAttribute("data-go")); }
+});
+
+/* ---------- home ---------- */
+function renderHome(){
+  const done = MODS.filter(m=>ms(m.id).best!==null).length;
+  const seen = MODS.reduce((a,m)=>a+Math.min(ms(m.id).seen, m.lessons.length),0);
+  const pct = Math.round(100*seen/totalLessons());
+  const qcount = allQuestions().length;
+  const ribs = MODS.filter(m=>ms(m.id).best!==null && placing(ms(m.id).best)>0).map(m=>ribbon(placing(ms(m.id).best),22)).join("");
+  let h = '<section class="hero"><div class="eyebrow">Study course for the AKC Junior Showmanship Judge\'s Guide</div><h1>Judging the<br>Junior Ring</h1>'+
+   '<p>Ten short modules take you from the purpose of the program through scoring, patterns, safety and ring procedure. Each ends with a quiz, then flashcards, ring scenarios and a final exam test whether it stuck.</p>'+
+   '<div class="stats"><span><b>'+MODS.length+'</b> modules</span><span><b>'+qcount+'</b> quiz questions</span><span><b>'+CARDS.length+'</b> flashcards</span><span><b>'+SCEN.length+'</b> ring scenarios</span></div></section>';
+  h += '<div class="ringcard"><div class="meter"><div class="lab"><span>Lessons read</span><span>'+seen+' / '+totalLessons()+'</span></div><div class="bar"><i style="width:'+pct+'%"></i></div>'+
+       '<div class="lab" style="margin-top:10px"><span>Module quizzes done</span><span>'+done+' / '+MODS.length+'</span></div><div class="bar"><i style="width:'+Math.round(100*done/MODS.length)+'%"></i></div></div>'+
+       '<div class="ribbons" aria-label="Ribbons earned">'+(ribs||'<span class="hint" style="margin:0">Ribbons you earn on quizzes appear here</span>')+'</div></div>';
+  h += '<h2 class="sec">Modules</h2><ul class="mods">';
+  MODS.forEach(m=>{
+    const st = ms(m.id); const lp = Math.min(st.seen, m.lessons.length);
+    const meta = (st.best!==null ? ribbon(placing(st.best)||4,18)+' '+st.best+'%' : '') ;
+    h += '<li><button class="mod" data-go="module-'+m.id+'"><span class="band">'+m.id+'</span><span><h3>'+esc(m.title)+'</h3><div class="sub">'+esc(m.sub)+'</div></span>'+
+         '<span class="meta"><span>'+lp+'/'+m.lessons.length+' lessons</span><span>'+(meta||'Quiz not taken')+'</span></span></button></li>';
+  });
+  h += '</ul><h2 class="sec">Practice</h2><div class="tools">'+
+   '<button class="tool" data-go="cards"><h3>Flashcards</h3><p>'+CARDS.length+' key facts and rules. Mark what you know.</p></button>'+
+   '<button class="tool" data-go="scenarios"><h3>Ring scenarios</h3><p>Make the call in '+SCEN.length+' realistic situations.</p></button>'+
+   '<button class="tool alt" data-go="exam"><h3>Final exam</h3><p>30 random questions from every module. Pass mark 80%.</p></button></div>';
+  $app.innerHTML = h;
+}
+
+/* ---------- module / lessons ---------- */
+function renderModule(id){
+  const m = MODS.find(x=>x.id===id); if(!m){ return renderHome(); }
+  const st = ms(id);
+  if(CTX.mod !== id){ CTX = { mod:id, i: Math.min(st.lesson||0, m.lessons.length-1) }; }
+  const i = CTX.i, L = m.lessons[i];
+  if(st.seen < i+1){ st.seen = i+1; }
+  st.lesson = i; save();
+  let h = '<div class="crumb"><span class="band">'+m.id+'</span><div><div class="eyebrow">Module '+m.id+' of '+MODS.length+'</div><h2>'+esc(m.title)+'</h2></div></div>';
+  h += '<div class="dots" aria-label="Lesson '+(i+1)+' of '+m.lessons.length+'">'+m.lessons.map((_,k)=>'<i class="'+(k<i?'on':k===i?'cur':'')+'"></i>').join("")+'</div>';
+  h += '<article class="card"><div class="eyebrow">Lesson '+(i+1)+' of '+m.lessons.length+'</div><h3>'+esc(L.title)+'</h3><div class="body">'+L.html+'<div id="widget"></div></div></article>';
+  const last = i === m.lessons.length-1;
+  h += '<div class="row"><button class="btn" id="prev"'+(i===0?' disabled':'')+'>Back</button>'+
+       (last ? '<button class="btn primary" id="quizgo">Take the module quiz</button>' : '<button class="btn primary" id="next">Next lesson</button>')+'</div>';
+  h += '<div class="row" style="justify-content:flex-start"><button class="link" data-go="home">All modules</button></div>';
+  $app.innerHTML = h;
+  const nx = document.getElementById("next"), pv = document.getElementById("prev"), qg = document.getElementById("quizgo");
+  if(nx) nx.onclick = function(){ CTX.i++; renderModule(id); window.scrollTo(0,0); };
+  if(pv) pv.onclick = function(){ CTX.i--; renderModule(id); window.scrollTo(0,0); };
+  if(qg) qg.onclick = function(){ go("module-"+id+"-quiz"); };
+  mountWidget(L);
+}
+function mountWidget(L){
+  const el = document.getElementById("widget"); if(!el || !L.type) return;
+  if(L.type==="weights") return widgetWeights(el);
+  if(L.type==="tierdrill") return widgetDrill(el);
+  if(L.type==="cats") return widgetCats(el);
+  if(L.type==="phases") return widgetPhases(el);
+  if(L.type==="patterns") return widgetPatterns(el);
+}
+function widgetWeights(el){
+  let sel = 0;
+  function draw(){
+    const max = 30;
+    let h = '<div class="legend"><span><s style="background:var(--mat)"></s>Drives placement</span><span><s style="background:#6C9B85"></s>Rewards poise</span><span><s style="background:#9AA3A0"></s>Pass-fail modifier</span></div><div class="wbars">';
+    WEIGHTS.forEach((w,k)=>{
+      h += '<button class="wb t-'+w.tier+'" data-k="'+k+'" aria-pressed="'+(k===sel)+'"><span class="nm"><span>'+esc(w.n)+'</span><b>'+w.w+'%</b></span><span class="tr"><i style="width:'+(100*w.w/max)+'%"></i></span></button>';
+    });
+    h += '</div><p class="wdesc" aria-live="polite"><b>'+esc(WEIGHTS[sel].n)+'.</b> '+esc(WEIGHTS[sel].d)+'</p>';
+    el.innerHTML = h;
+    el.querySelectorAll(".wb").forEach(b=>b.onclick=function(){ sel = +b.getAttribute("data-k"); draw(); });
+  }
+  draw();
+}
+function widgetDrill(el){
+  const items = shuffle(WEIGHTS.map((w,k)=>k)); let i=0, score=0, locked=false;
+  function draw(){
+    if(i>=items.length){
+      el.innerHTML = '<div class="callout"><b>Drill complete: '+score+' of '+items.length+' correct.</b> '+(score===items.length?'You have the structure down.':'Reopen the previous lesson for the three jobs, then try again.')+'</div><button class="btn" id="again">Run it again</button>';
+      document.getElementById("again").onclick = function(){ i=0; score=0; items.splice(0,items.length,...shuffle(WEIGHTS.map((w,k)=>k))); draw(); };
+      return;
+    }
+    const w = WEIGHTS[items[i]]; locked=false;
+    let h = '<div class="drill"><div class="qhead"><span>Category '+(i+1)+' of '+items.length+'</span><span>'+score+' correct</span></div><div class="q">'+esc(w.n)+'</div><div class="choices">';
+    Object.keys(TIERS).forEach(t=>{ h += '<button class="opt" data-t="'+t+'">'+esc(TIERS[t])+'</button>'; });
+    h += '</div><div id="fb" aria-live="polite"></div></div>';
+    el.innerHTML = h;
+    el.querySelectorAll(".opt").forEach(b=>b.onclick=function(){
+      if(locked) return; locked=true;
+      const ok = b.getAttribute("data-t")===w.tier;
+      if(ok) score++;
+      el.querySelectorAll(".opt").forEach(x=>{ x.disabled=true; if(x.getAttribute("data-t")===w.tier) x.classList.add("right"); });
+      if(!ok) b.classList.add("wrong");
+      document.getElementById("fb").innerHTML = '<div class="why '+(ok?'ok':'no')+'"><span class="v">'+(ok?'Correct':'Not quite')+'</span>'+esc(w.n)+' ('+w.w+'%) is in the group "'+esc(TIERS[w.tier])+'".</div><div class="row"><span></span><button class="btn primary" id="dn">'+(i===items.length-1?'See result':'Next')+'</button></div>';
+      document.getElementById("dn").onclick = function(){ i++; draw(); };
+    });
+  }
+  draw();
+}
+function widgetCats(el){
+  el.innerHTML = CATS.map((c,k)=>'<details'+(k===0?' open':'')+'><summary>'+esc(c.n)+'</summary><div class="in">'+
+    '<h5 class="l">Looks for</h5><ul>'+c.look.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'+
+    '<h5 class="f">Faults</h5><ul>'+c.fault.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'+
+    '<h5 class="n">Neutral: not an automatic penalty or credit</h5><ul>'+c.neutral.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div></details>').join("");
+}
+function widgetPhases(el){
+  el.innerHTML = '<div class="tw"><table><thead><tr><th>Phase</th><th>What you can observe</th><th>Categories in play</th></tr></thead><tbody>'+
+    PHASES.map(r=>'<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>').join("")+'</tbody></table></div>'+
+    '<div class="callout">At the end, weigh the whole performance. Reward the junior who best combines technical accuracy, ring awareness, partnership with the dog, instruction-following and sportsmanship from entry to exit.</div>';
+}
+function widgetPatterns(el){
+  el.innerHTML = PATTERNS.map((p,k)=>'<details'+(k===0?' open':'')+'><summary><span>'+esc(p.n)+'</span></summary><div class="in"><p><b>'+esc(p.who)+'.</b> '+esc(p.purpose)+'</p>'+
+    '<h5 class="l">Look for</h5><ul>'+p.look.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'+
+    '<h5 class="f">Do not reward</h5><ul>'+p.not.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div></details>').join("");
+}
+
+/* ---------- quiz runner (module quizzes + exam) ---------- */
+let QZ = null;
+function startModuleQuiz(id){
+  const m = MODS.find(x=>x.id===id); if(!m) return renderHome();
+  QZ = { kind:"module", mod:id, title:m.title, list: shuffle(m.quiz.map(q=>prep(Object.assign({mod:id},q)))), i:0, picks:[], immediate:true };
+  renderQ();
+}
+function startExam(){
+  const pool = shuffle(allQuestions()).slice(0,30);
+  QZ = { kind:"exam", title:"Final exam", list: pool.map(prep), i:0, picks:[], immediate:false };
+  renderQ();
+}
+function renderQ(){
+  const q = QZ.list[QZ.i], n = QZ.list.length;
+  const picked = QZ.picks[QZ.i];
+  let h = '<div class="qhead"><span>'+esc(QZ.title)+'</span><span>Question '+(QZ.i+1)+' of '+n+'</span></div><div class="dots">'+QZ.list.map((_,k)=>'<i class="'+(k<QZ.i?'on':k===QZ.i?'cur':'')+'"></i>').join("")+'</div>';
+  h += '<article class="card" style="padding-bottom:18px"><div class="qtext">'+esc(q.p)+'</div><div class="choices" id="ch">';
+  q.opts.forEach((o,k)=>{ h += '<button class="opt" data-k="'+k+'"><span class="k">'+"ABCD"[k]+'</span>'+esc(o)+'</button>'; });
+  h += '</div><div id="fb" aria-live="polite"></div></article>';
+  $app.innerHTML = h;
+  const btns = $app.querySelectorAll(".opt");
+  function lock(k){
+    QZ.picks[QZ.i] = k;
+    btns.forEach((b,j)=>{ b.disabled = true; });
+    if(QZ.immediate){
+      btns.forEach((b,j)=>{ if(j===q.ci) b.classList.add("right"); });
+      if(k!==q.ci) btns[k].classList.add("wrong");
+      document.getElementById("fb").innerHTML = '<div class="why '+(k===q.ci?'ok':'no')+'"><span class="v">'+(k===q.ci?'Correct':'Not quite')+'</span>'+esc(q.why)+'</div>';
+    } else { btns[k].classList.add("sel"); }
+    const last = QZ.i === n-1;
+    document.getElementById("fb").insertAdjacentHTML("beforeend",'<div class="row"><span></span><button class="btn primary" id="nq">'+(last?'Finish':'Next question')+'</button></div>');
+    document.getElementById("nq").onclick = function(){ if(last){ finishQuiz(); } else { QZ.i++; renderQ(); window.scrollTo(0,0); } };
+  }
+  btns.forEach((b,k)=>b.onclick=function(){ if(QZ.picks[QZ.i]===undefined) lock(k); });
+  if(picked!==undefined){ /* re-render after nav: not used */ }
+}
+function finishQuiz(){
+  const n = QZ.list.length; let right = 0; const missed = []; const byMod = {};
+  QZ.list.forEach((q,k)=>{
+    const ok = QZ.picks[k]===q.ci; if(ok) right++; else missed.push({q:q,pick:QZ.picks[k]});
+    const b = byMod[q.mod] || (byMod[q.mod]={r:0,n:0}); b.n++; if(ok) b.r++;
+  });
+  const pct = Math.round(100*right/n), pl = placing(pct);
+  if(QZ.kind==="module"){ const st = ms(QZ.mod); st.best = Math.max(st.best||0, pct); st.seen = MODS.find(x=>x.id===QZ.mod).lessons.length; }
+  else { S.exam.count++; S.exam.last = pct; S.exam.best = Math.max(S.exam.best, pct); }
+  save();
+  let h = '<article class="card result"><div class="eyebrow">'+esc(QZ.title)+' result</div><div class="pct">'+pct+'%</div>'+(pl?'<div>'+ribbon(pl,44)+'</div><div class="place">'+PLACE[pl]+'</div>':'<div class="place">Keep studying</div>')+
+       '<p>'+right+' of '+n+' correct.'+(QZ.kind==="exam"?(pct>=80?' That clears the 80% pass mark.':' The pass mark is 80%.'):'')+'</p></article>';
+  if(QZ.kind==="exam"){
+    h += '<h2 class="sec">By module</h2><div class="breakdown">'+Object.keys(byMod).sort((a,b)=>a-b).map(id=>{ const b=byMod[id]; return '<div class="bd"><span class="band">'+id+'</span><span>'+esc(MODS.find(m=>m.id==id).title)+'</span><b>'+b.r+'/'+b.n+'</b></div>'; }).join("")+'</div>';
+  }
+  if(missed.length){
+    h += '<h2 class="sec">Review what you missed</h2>'+missed.map(x=>'<div class="miss"><b>'+esc(x.q.p)+'</b>Your answer: '+(x.pick!==undefined?esc(x.q.opts[x.pick]):'none')+'<br><span class="ok-line">Correct: '+esc(x.q.opts[x.q.ci])+'</span><br>'+esc(x.q.why)+(x.q.mod&&QZ.kind==="exam"?' <button class="link" data-go="module-'+x.q.mod+'">Module '+x.q.mod+'</button>':'')+'</div>').join("");
+  } else { h += '<div class="callout"><b>Clean sweep.</b> Nothing to review.</div>'; }
+  h += '<div class="row">'+(QZ.kind==="module"?'<button class="btn" id="redo">Retake quiz</button><button class="btn primary" id="nextm">'+(QZ.mod<MODS.length?'Next module':'Final exam')+'</button>':'<button class="btn" data-go="home">Back to modules</button><button class="btn primary" id="redo">New exam</button>')+'</div>';
+  $app.innerHTML = h; window.scrollTo(0,0);
+  const rd = document.getElementById("redo"), nm = document.getElementById("nextm");
+  if(rd) rd.onclick = function(){ if(QZ.kind==="module") startModuleQuiz(QZ.mod); else startExam(); window.scrollTo(0,0); };
+  if(nm) nm.onclick = function(){ if(QZ.mod<MODS.length){ CTX={}; go("module-"+(QZ.mod+1)); } else go("exam"); };
+}
+
+/* ---------- exam start ---------- */
+function renderExamStart(){
+  const e = S.exam;
+  let h = '<div class="eyebrow">All ten modules</div><h2 class="sec" style="margin-top:4px">Final exam</h2>'+
+   '<article class="card"><div class="body"><p>Thirty questions drawn at random from every module. Answers are not revealed until the end, when you get a score, a module-by-module breakdown and an explanation for each miss.</p>'+
+   '<ul><li>Pass mark: 80%</li><li>Ribbons: 90% first, 80% second, 70% third, 60% fourth</li><li>Questions and answer order change every attempt</li></ul>'+
+   (e.count?'<div class="callout">Attempts: <b>'+e.count+'</b> &middot; Best: <b>'+e.best+'%</b> &middot; Last: <b>'+e.last+'%</b></div>':'')+
+   '</div></article><div class="row"><span></span><button class="btn primary" id="go">Start exam</button></div>';
+  $app.innerHTML = h;
+  document.getElementById("go").onclick = function(){ startExam(); window.scrollTo(0,0); };
+}
+
+/* ---------- flashcards ---------- */
+let FC = { filter:"all", order:null, i:0, flip:false };
+function fcDeck(){
+  let idx = CARDS.map((c,k)=>k);
+  if(FC.filter==="review") idx = idx.filter(k=>!S.known[k]);
+  if(FC.order){ const ord = FC.order.filter(k=>idx.indexOf(k)>-1); idx = ord.concat(idx.filter(k=>ord.indexOf(k)<0)); }
+  return idx;
+}
+function renderCards(){
+  const deck = fcDeck(); const known = Object.keys(S.known).filter(k=>S.known[k]).length;
+  let h = '<div class="eyebrow">'+CARDS.length+' cards &middot; '+known+' marked known</div><h2 class="sec" style="margin-top:4px">Flashcards</h2>'+
+   '<div class="pills"><button class="pill" data-f="all" aria-pressed="'+(FC.filter==="all")+'">All cards</button><button class="pill" data-f="review" aria-pressed="'+(FC.filter==="review")+'">Still learning</button><button class="pill" id="shuf">Shuffle</button><button class="pill" id="rst">Reset progress</button></div>';
+  if(!deck.length){
+    h += '<article class="card"><h3>Every card is marked known</h3><p>Switch to All cards to keep practicing, or reset progress.</p></article>';
+    $app.innerHTML = h; wireCards(deck); return;
+  }
+  if(FC.i >= deck.length) FC.i = 0;
+  const k = deck[FC.i], c = CARDS[k];
+  h += '<div class="qhead"><span>Card '+(FC.i+1)+' of '+deck.length+'</span><span>'+(S.known[k]?'Known':'Learning')+'</span></div>'+
+   '<button class="fcard '+(FC.flip?'back':'front')+'" id="fc" aria-live="polite"><span class="tag">'+(FC.flip?'Answer':'Prompt')+'</span><span class="txt">'+esc(FC.flip?c[1]:c[0])+'</span></button>'+
+   '<p class="hint">Tap the card to '+(FC.flip?'see the prompt':'reveal the answer')+'</p>'+
+   '<div class="row"><button class="btn" id="prevc">Previous</button><button class="btn" id="learn">Still learning</button><button class="btn primary" id="know">Got it</button></div>';
+  $app.innerHTML = h; wireCards(deck);
+}
+function wireCards(deck){
+  $app.querySelectorAll("[data-f]").forEach(b=>b.onclick=function(){ FC.filter=b.getAttribute("data-f"); FC.i=0; FC.flip=false; renderCards(); });
+  const sh = document.getElementById("shuf"); if(sh) sh.onclick=function(){ FC.order = shuffle(CARDS.map((c,k)=>k)); FC.i=0; FC.flip=false; renderCards(); };
+  const rs = document.getElementById("rst"); if(rs) rs.onclick=function(){ S.known={}; save(); FC.i=0; FC.flip=false; renderCards(); };
+  if(!deck.length) return;
+  const k = deck[FC.i];
+  const fc = document.getElementById("fc"); if(fc) fc.onclick=function(){ FC.flip=!FC.flip; renderCards(); };
+  const nxt = function(){ FC.flip=false; FC.i = (FC.i+1) % Math.max(1,fcDeck().length); renderCards(); };
+  const kn = document.getElementById("know"); if(kn) kn.onclick=function(){ S.known[k]=true; save(); if(FC.filter==="review"){ FC.flip=false; renderCards(); } else nxt(); };
+  const ln = document.getElementById("learn"); if(ln) ln.onclick=function(){ S.known[k]=false; save(); nxt(); };
+  const pv = document.getElementById("prevc"); if(pv) pv.onclick=function(){ FC.flip=false; FC.i = (FC.i-1+deck.length)%deck.length; renderCards(); };
+}
+
+/* ---------- scenarios ---------- */
+let SC = { i:0, order:null, score:0, answered:false };
+function renderScen(){
+  if(!SC.order){ SC.order = shuffle(SCEN.map((s,k)=>k)); SC.i=0; SC.score=0; }
+  if(SC.i >= SC.order.length){
+    const pct = Math.round(100*SC.score/SC.order.length);
+    $app.innerHTML = '<article class="card result"><div class="eyebrow">Ring scenarios</div><div class="pct">'+SC.score+'/'+SC.order.length+'</div><p>'+(pct>=80?'Sound judgment. Your calls matched the guide.':'Reread the explanations on the ones you missed, then try again; the order and options reshuffle.')+'</p></article><div class="row"><button class="btn" data-go="home">Back to modules</button><button class="btn primary" id="again">Try again</button></div>';
+    document.getElementById("again").onclick=function(){ SC.order=null; renderScen(); window.scrollTo(0,0); };
+    return;
+  }
+  const s = SCEN[SC.order[SC.i]];
+  const opts = shuffle(s.o.map((t,k)=>({t:t,right:k===s.c})));
+  let h = '<div class="qhead"><span>Scenario '+(SC.i+1)+' of '+SC.order.length+'</span><span>'+SC.score+' right</span></div><div class="dots">'+SC.order.map((_,k)=>'<i class="'+(k<SC.i?'on':k===SC.i?'cur':'')+'"></i>').join("")+'</div>'+
+   '<article class="card" style="padding-bottom:18px"><div class="eyebrow scen-t">You are the judge</div><h3>'+esc(s.t)+'</h3><p>'+esc(s.s)+'</p><div class="choices" id="ch">'+
+   opts.map((o,k)=>'<button class="opt" data-k="'+k+'"><span class="k">'+"ABCD"[k]+'</span>'+esc(o.t)+'</button>').join("")+'</div><div id="fb" aria-live="polite"></div></article>';
+  $app.innerHTML = h;
+  const btns = $app.querySelectorAll(".opt"); let done=false;
+  btns.forEach((b,k)=>b.onclick=function(){
+    if(done) return; done=true;
+    const ok = opts[k].right; if(ok) SC.score++;
+    btns.forEach((x,j)=>{ x.disabled=true; if(opts[j].right) x.classList.add("right"); });
+    if(!ok) b.classList.add("wrong");
+    document.getElementById("fb").innerHTML = '<div class="why '+(ok?'ok':'no')+'"><span class="v">'+(ok?'Good call':'Not the best call')+'</span>'+esc(s.why)+'</div><div class="row"><span></span><button class="btn primary" id="ns">'+(SC.i===SC.order.length-1?'See result':'Next scenario')+'</button></div>';
+    document.getElementById("ns").onclick=function(){ SC.i++; renderScen(); window.scrollTo(0,0); };
+  });
+}
+
+/* ---------- boot ---------- */
+route();
+</script>
+</body>
+</html>
